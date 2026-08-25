@@ -41,7 +41,8 @@ class SdkDistributionTests(unittest.TestCase):
             self.assertEqual(built.returncode, 0, built.stderr)
             environment = target / "venv"
             venv.EnvBuilder(with_pip=True, system_site_packages=True).create(environment)
-            python = environment / "Scripts" / "python.exe"
+            scripts = environment / ("Scripts" if os.name == "nt" else "bin")
+            python = scripts / ("python.exe" if os.name == "nt" else "python")
             installed = subprocess.run([str(python), "-m", "pip", "install", "--no-deps", str(next(wheels.glob("*.whl")))], capture_output=True, text=True, timeout=180)
             self.assertEqual(installed.returncode, 0, installed.stderr)
             port = "8845"
@@ -56,7 +57,7 @@ class SdkDistributionTests(unittest.TestCase):
                     except Exception:
                         __import__("time").sleep(.25)
                 else: self.fail("Live SDK test server did not become ready.")
-                command = environment / "Scripts" / "aifleet.exe"
+                command = scripts / ("aifleet.exe" if os.name == "nt" else "aifleet")
                 result = subprocess.run([str(command), "--base-url", f"http://127.0.0.1:{port}", "--json", "inspect", "fleet"], capture_output=True, text=True, timeout=60)
                 self.assertEqual(result.returncode, 0, result.stderr)
                 payload = json.loads(result.stdout)
