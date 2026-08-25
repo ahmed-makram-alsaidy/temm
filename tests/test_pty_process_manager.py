@@ -1,4 +1,5 @@
 import asyncio
+import re
 import sys
 import unittest
 
@@ -231,28 +232,44 @@ class PtyProcessManagerTests(unittest.IsolatedAsyncioTestCase):
         self.manager = ProcessManager(graceful_shutdown_seconds=0.2)
         if not self.manager.pty_capability()["supported"]:
             self.skipTest("ConPTY backend is not installed")
-        parent_code = "import subprocess,sys,time;subprocess.Popen([sys.executable,'-c','import time;time.sleep(30)']);time.sleep(30)"
+        output = []
+        child_ready = asyncio.Event()
+
+        def record_output(text, _stream):
+            output.append(text)
+            if re.search(r"child_pid:(\d+)", "".join(output)):
+                child_ready.set()
+
+        parent_code = "import subprocess,sys,time;child=subprocess.Popen([sys.executable,'-c','import time;time.sleep(30)']);print(f'child_pid:{child.pid}',flush=True);time.sleep(30)"
         execution = asyncio.create_task(
             self.manager.execute_pty(
                 [sys.executable, "-c", parent_code],
                 task_id="conpty-tree-cancel",
                 timeout_seconds=30,
+                on_chunk=record_output,
             )
         )
         await self._wait_until_running("conpty-tree-cancel")
+        try:
+            await asyncio.wait_for(child_ready.wait(), timeout=10)
+        except asyncio.TimeoutError:
+            self.fail(f"ConPTY child did not report a pid: {''.join(output)!r}")
+        child_match = re.search(r"child_pid:(\d+)", "".join(output))
+        self.assertIsNotNone(child_match)
+        child_pid = int(child_match.group(1))
         parent_pid = self.manager.get_status("conpty-tree-cancel")["pid"]
         children = []
-        for _ in range(200):
+        for _ in range(500):
             try:
                 children = psutil.Process(parent_pid).children(recursive=True)
             except psutil.NoSuchProcess:
                 children = []
-            if children:
+            if any(child.pid == child_pid for child in children):
                 break
             await asyncio.sleep(0.01)
-        self.assertTrue(children)
+        self.assertTrue(any(child.pid == child_pid for child in children))
         child_pids = [child.pid for child in children]
-        await self.manager.cancel("conpty-tree-cancel")
+        self.assertTrue(await self.manager.cancel("conpty-tree-cancel"))
         result = await execution
         for _ in range(200):
             if not any(psutil.pid_exists(pid) for pid in child_pids):

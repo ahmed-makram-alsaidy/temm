@@ -52,12 +52,15 @@ async def run_tests() -> None:
             assert any(blocker["code"] == "workspace_required" for blocker in preflight["blockers"])
 
         print("[4/7] Checking read-only version probe and command audit API...")
-        response = await client.post(
-            "/api/terminal/run",
-            json={"command": "python --version", "shell": "powershell"},
-        )
-        assert response.status_code == 200
-        assert response.json()["success"] is True
+        if sys.platform == "win32":
+            response = await client.post(
+                "/api/terminal/run",
+                json={"command": "python --version", "shell": "powershell"},
+            )
+            assert response.status_code == 200
+            assert response.json()["success"] is True
+        else:
+            print(" -> Windows terminal execution probe skipped")
         response = await client.post(
             "/api/terminal/run",
             json={"command": "Get-ChildItem", "shell": "powershell"},
