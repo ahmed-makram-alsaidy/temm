@@ -8,7 +8,6 @@ jobs:
   backend:
     env:
       AI_FLEET_TEST_DATABASE: "1"
-      AI_FLEET_DATA_DIR: ${{ github.workspace }}/ai-fleet-test-db-ci
     strategy:
       fail-fast: false
       matrix:
@@ -27,10 +26,27 @@ jobs:
         run: python -m pip install --require-hashes -r requirements-lock-linux.txt
       - run: python -m core.ai_fleet.license_policy
       - run: python -m compileall -q core tests
-      - run: python -m unittest tests.test_license_policy tests.test_migrations tests.test_security tests.test_origin_policy tests.test_input_limits
-      - run: python -m unittest tests.test_sdk tests.test_headless_cli tests.test_sdk_distribution
-      - run: python -m unittest discover -s tests -p "test_*.py"
-      - run: python tests/test_e2e.py
+      - env:
+          AI_FLEET_DATA_DIR: ${{ runner.temp }}/ai-fleet-test-db-targets
+        run: python -m unittest tests.test_license_policy tests.test_migrations tests.test_security tests.test_origin_policy tests.test_input_limits
+      - env:
+          AI_FLEET_DATA_DIR: ${{ runner.temp }}/ai-fleet-test-db-sdk
+        run: python -m unittest tests.test_sdk tests.test_headless_cli tests.test_sdk_distribution
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: npm
+          cache-dependency-path: apps/web/package-lock.json
+      - working-directory: apps/web
+        run: npm ci
+      - working-directory: apps/web
+        run: npm run build
+      - env:
+          AI_FLEET_DATA_DIR: ${{ runner.temp }}/ai-fleet-test-db-discover
+        run: python -m unittest discover -s tests -p "test_*.py"
+      - env:
+          AI_FLEET_DATA_DIR: ${{ runner.temp }}/ai-fleet-test-db-e2e
+        run: python tests/test_e2e.py
       - run: python -m core.ai_fleet.build_provenance --output build-evidence-a
       - run: python -m core.ai_fleet.build_provenance --output build-evidence-b
       - if: runner.os == 'Linux'
