@@ -53,14 +53,14 @@ async def run(chrome: Path, url: str):
             if not endpoint: raise RuntimeError("Chrome DevTools endpoint unavailable.")
             async with websockets.connect(endpoint, max_size=16*1024*1024) as socket:
                 cdp=Cdp(socket); await cdp.call("Page.enable"); await cdp.call("Runtime.enable"); await cdp.call("Page.bringToFront"); await cdp.call("Emulation.setDeviceMetricsOverride", {"width":1440,"height":900,"deviceScaleFactor":1,"mobile":False}); await cdp.call("Page.navigate", {"url":url}); await asyncio.sleep(1)
-                await cdp.value("localStorage.setItem('ai_fleet_onboarding_complete','1'); localStorage.setItem('ai_fleet_lang','en'); location.reload()"); await asyncio.sleep(1)
+                await cdp.value("localStorage.setItem('ai_fleet_onboarding_complete','1'); localStorage.setItem('ai_fleet_lang','en'); localStorage.setItem('ai_fleet_preferences', JSON.stringify({reduceMotion:true})); location.reload()"); await asyncio.sleep(1)
                 report=[]
                 for theme in THEMES:
-                    await cdp.value(f"localStorage.setItem('ai_fleet_theme',{json.dumps(theme)}); document.documentElement.dataset.theme={json.dumps(theme)}")
+                    await cdp.value(f"localStorage.setItem('ai_fleet_theme',{json.dumps(theme)}); document.documentElement.dataset.theme={json.dumps(theme)}; document.documentElement.dataset.reduceMotion='true'")
                     for route in ROUTES:
                         selector=".new-task-button" if route=="run" else f"[data-route='{route}']"
                         clicked=await cdp.value(f"(() => {{ const x=document.querySelector({json.dumps(selector)}); if(x)x.click(); return Boolean(x) }})()")
-                        await asyncio.sleep(.35)
+                        await asyncio.sleep(1)
                         result=await cdp.value(AUDIT)
                         report.append({"theme":theme,"route":route,"navigation_control_found":clicked,**result})
                 return report
@@ -73,7 +73,7 @@ async def run(chrome: Path, url: str):
 def main():
     parser=argparse.ArgumentParser();parser.add_argument("--chrome",type=Path,required=True);parser.add_argument("--url",required=True);parser.add_argument("--report",type=Path,required=True);args=parser.parse_args()
     report=asyncio.run(run(args.chrome,args.url));args.report.parent.mkdir(parents=True,exist_ok=True);args.report.write_text(json.dumps(report,indent=2),encoding="utf-8")
-    failures=sum(item["failure_count"] for item in report);print(json.dumps({"cases":len(report),"contrast_failures":failures,"complex_backgrounds":sum(item["complex_background_count"] for item in report),"report":str(args.report)},indent=2));return 1 if failures else 0
+    failures=sum(item["failure_count"] for item in report);details=[{"theme":item["theme"],"route":item["route"],"failures":item["failures"]} for item in report if item["failure_count"]];print(json.dumps({"cases":len(report),"contrast_failures":failures,"complex_backgrounds":sum(item["complex_background_count"] for item in report),"failure_details":details,"report":str(args.report)},indent=2));return 1 if failures else 0
 
 
 if __name__=="__main__":raise SystemExit(main())
