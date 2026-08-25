@@ -8,7 +8,7 @@ jobs:
   backend:
     env:
       AI_FLEET_TEST_DATABASE: "1"
-      AI_FLEET_DATA_DIR: ${{ runner.temp }}/ai-fleet-test-db
+      AI_FLEET_DATA_DIR: ${{ github.workspace }}/ai-fleet-test-db-ci
     strategy:
       fail-fast: false
       matrix:
