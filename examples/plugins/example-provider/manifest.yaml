@@ -1,0 +1,10 @@
+id: example-provider
+name: Example Provider
+version: 0.1.0
+protocol: '1.0'
+type: provider
+platforms: [windows, linux, macos]
+capabilities: [general]
+permissions: []
+entrypoint: adapter.py
+rpc_methods: [auth, health, start, stream, cancel, usage, quota]

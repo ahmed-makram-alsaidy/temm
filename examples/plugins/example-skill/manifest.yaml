@@ -1,0 +1,10 @@
+id: example-skill
+name: Example Skill
+version: 0.1.0
+protocol: '1.0'
+type: skill
+platforms: [windows, linux, macos]
+capabilities: [general]
+permissions: []
+entrypoint: adapter.py
+rpc_methods: [health, start]

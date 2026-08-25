@@ -1,0 +1,40 @@
+
+# Secrets
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+
+# Python
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+
+# Node / Vite
+node_modules/
+dist/
+build/
+.vite/
+coverage/
+
+# Runtime / local data
+*.log
+*.pid
+*.sqlite-shm
+*.sqlite-wal
+
+# Editors / OS
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
+
+# AI Fleet local/runtime artifacts
+.temp/
+tmp/
+logs/

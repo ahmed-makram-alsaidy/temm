@@ -1,0 +1,52 @@
+{
+  "name": "web",
+  "private": true,
+  "version": "0.0.0",
+  "license": "Apache-2.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "license:check": "python ../../core/ai_fleet/license_policy.py --root ../.. --generate-frontend",
+    "prebuild": "npm run license:check",
+    "build": "tsc -b && vite build",
+    "test:v3": "node --experimental-strip-types src/__tests__/project-workspace-model.test.ts",
+    "test:v4": "node --experimental-strip-types src/__tests__/project-execution-model.test.ts",
+    "test:v5": "node --experimental-strip-types src/__tests__/project-workspace-motion.test.ts",
+    "test:v6": "node --experimental-strip-types src/__tests__/project-evidence-model.test.ts",
+    "test:v7": "node --experimental-strip-types src/__tests__/project-convergence.test.ts",
+    "test:v8": "node --experimental-strip-types src/__tests__/supporting-screens.test.ts",
+    "test:v9": "node --experimental-strip-types src/__tests__/shell-navigation.test.ts",
+    "test:v10": "node --experimental-strip-types src/__tests__/system-overview.test.ts",
+    "check:v3": "python ../../tools_web/check_v3_workspace.py",
+    "check:v4": "python ../../tools_web/check_v4_work_graph.py",
+    "check:v5": "python ../../tools_web/check_v5_motion.py",
+    "check:v6": "python ../../tools_web/check_v6_evidence.py",
+    "check:v7": "python ../../tools_web/check_v7_convergence.py",
+    "check:v8": "python ../../tools_web/check_v8_supporting_screens.py",
+    "check:v9": "python ../../tools_web/check_v9_shell.py",
+    "check:v10": "python ../../tools_web/check_v10_inner_surfaces.py",
+    "lint": "oxlint",
+    "preview": "vite preview",
+    "test:v11": "node --experimental-strip-types src/__tests__/final-acceptance.test.ts",
+    "check:v11": "python ../../tools_web/check_v11_final_acceptance.py"
+  },
+  "dependencies": {
+    "@fontsource-variable/alexandria": "^5.3.0",
+    "@fontsource-variable/manrope": "^5.3.0",
+    "@fontsource/jetbrains-mono": "^5.3.0",
+    "@xterm/addon-fit": "^0.11.0",
+    "@xterm/xterm": "^6.0.0",
+    "lucide-react": "^1.31.0",
+    "react": "^19.2.8",
+    "react-dom": "^19.2.8"
+  },
+  "devDependencies": {
+    "@types/node": "^24.13.3",
+    "@types/react": "^19.2.17",
+    "@types/react-dom": "^19.2.3",
+    "@vitejs/plugin-react": "^6.0.4",
+    "oxlint": "^1.75.0",
+    "typescript": "~6.0.2",
+    "vite": "^8.2.0"
+  }
+}

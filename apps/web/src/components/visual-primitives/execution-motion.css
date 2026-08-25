@@ -1,0 +1,91 @@
+/* ==========================================================================
+   V5 EXECUTION MOTION — causal transit and arrival embellishments.
+
+   Law: motion represents product truth only. The travelling illumination
+   below is the ONE sanctioned continuous motion in the product (V1 tokens,
+   --transit-cycle); it exists only while a run is genuinely active and is
+   removed with the run. Every arrival animation is finite, and its final
+   frame equals the element's static style, so removing the animation can
+   never change what the geometry says.
+
+   Reduced motion removes travel and preserves state: every animation here
+   is explicitly disabled below, and the static geometry alone carries the
+   full meaning.
+   ========================================================================== */
+
+/* Sustained causal transit — travels the live branch toward the gate.
+   The path is drawn in causal direction (ExecutionConnector resolves the
+   logical leading edge), so RTL travel mirrors with the geometry, never
+   mechanically. pathLength=100 fixes the dash math to the token cycle. */
+.temm-connector__transit {
+  fill: none;
+  stroke: var(--c-live);
+  stroke-width: var(--w-2);
+  stroke-linecap: round;
+  stroke-dasharray: 14 86;
+  stroke-dashoffset: 100;
+  animation: temm-transit-travel var(--transit-cycle) linear infinite;
+}
+
+@keyframes temm-transit-travel {
+  to { stroke-dashoffset: 0; }
+}
+
+/* Effect materialisation — the measured effect arrives at the gate. */
+.temm-gate[data-animate='true'] .temm-gate__effect {
+  animation: temm-effect-materialise var(--t-struct-fast) var(--e-out) both;
+}
+
+@keyframes temm-effect-materialise {
+  from { opacity: 0; }
+}
+
+/* Rejection strike — measured, refused; the segment is struck at the gate. */
+.temm-gate[data-animate='true'] .temm-gate__strike {
+  stroke-dasharray: 24;
+  animation: temm-strike-draw var(--t-struct-fast) var(--e-out) both;
+}
+
+@keyframes temm-strike-draw {
+  from { stroke-dashoffset: 24; }
+  to { stroke-dashoffset: 0; }
+}
+
+/* Acceptance rejoin — the branch completes through the open gate. */
+.temm-gate[data-animate='true'] .temm-gate__through {
+  stroke-dasharray: 60;
+  animation: temm-rejoin-draw var(--t-struct) var(--e-out) both;
+}
+
+@keyframes temm-rejoin-draw {
+  from { stroke-dashoffset: 60; }
+  to { stroke-dashoffset: 0; }
+}
+
+/* Causal state colors resolve as structural changes, never instant flips. */
+.temm-gate__segment {
+  transition: fill var(--t-struct-fast) var(--e-out), stroke var(--t-struct-fast) var(--e-out);
+}
+.temm-gate__frame,
+.temm-gate__through {
+  transition: stroke var(--t-struct) var(--e-out);
+}
+
+/* Reduced motion: no travel, no arrival sequences; the final truthful
+   geometry renders immediately and carries the state on its own. */
+@media (prefers-reduced-motion: reduce) {
+  .temm-connector__transit { animation: none; opacity: 0; }
+  .temm-gate[data-animate='true'] .temm-gate__effect,
+  .temm-gate[data-animate='true'] .temm-gate__strike,
+  .temm-gate[data-animate='true'] .temm-gate__through { animation: none; }
+  .temm-gate__segment,
+  .temm-gate__frame,
+  .temm-gate__through { transition: none; }
+}
+:root[data-reduce-motion='true'] .temm-connector__transit { animation: none; opacity: 0; }
+:root[data-reduce-motion='true'] .temm-gate[data-animate='true'] .temm-gate__effect,
+:root[data-reduce-motion='true'] .temm-gate[data-animate='true'] .temm-gate__strike,
+:root[data-reduce-motion='true'] .temm-gate[data-animate='true'] .temm-gate__through { animation: none; }
+:root[data-reduce-motion='true'] .temm-gate__segment,
+:root[data-reduce-motion='true'] .temm-gate__frame,
+:root[data-reduce-motion='true'] .temm-gate__through { transition: none; }

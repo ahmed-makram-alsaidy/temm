@@ -1,0 +1,124 @@
+{
+  "shots": [
+    {
+      "name": "v11-01-projects-launch",
+      "screenshot": "v11-01-projects-launch.png",
+      "state": {
+        "route": "projects",
+        "overflow": false
+      }
+    },
+    {
+      "name": "v11-02-project-workspace",
+      "screenshot": "v11-02-project-workspace.png",
+      "state": {
+        "route": "projects",
+        "overflow": false
+      }
+    },
+    {
+      "name": "v11-03-acceptance-cell",
+      "screenshot": "v11-03-acceptance-cell.png",
+      "state": {
+        "route": "projects",
+        "overflow": false
+      }
+    },
+    {
+      "name": "v11-04-runs",
+      "screenshot": "v11-04-runs.png",
+      "state": {
+        "route": "runs",
+        "overflow": false
+      }
+    },
+    {
+      "name": "v11-05-run-details-receipt",
+      "screenshot": "v11-05-run-details-receipt.png",
+      "state": {
+        "route": "runs",
+        "overflow": false
+      }
+    },
+    {
+      "name": "v11-06-tools",
+      "screenshot": "v11-06-tools.png",
+      "state": {
+        "route": "fleet",
+        "overflow": false
+      }
+    },
+    {
+      "name": "v11-07-workspaces",
+      "screenshot": "v11-07-workspaces.png",
+      "state": {
+        "route": "workspaces",
+        "overflow": false
+      }
+    },
+    {
+      "name": "v11-08-automation",
+      "screenshot": "v11-08-automation.png",
+      "state": {
+        "route": "automation",
+        "overflow": false
+      }
+    },
+    {
+      "name": "v11-09-insights",
+      "screenshot": "v11-09-insights.png",
+      "state": {
+        "route": "insights",
+        "overflow": false
+      }
+    },
+    {
+      "name": "v11-10-model-lab",
+      "screenshot": "v11-10-model-lab.png",
+      "state": {
+        "route": "model_lab",
+        "overflow": false
+      }
+    },
+    {
+      "name": "v11-11-system-overview",
+      "screenshot": "v11-11-system-overview.png",
+      "state": {
+        "route": "dashboard",
+        "overflow": false
+      }
+    },
+    {
+      "name": "v11-12-settings",
+      "screenshot": "v11-12-settings.png",
+      "state": {
+        "route": "settings",
+        "overflow": false
+      }
+    },
+    {
+      "name": "v11-13-command-console",
+      "screenshot": "v11-13-command-console.png",
+      "state": {
+        "route": "console",
+        "overflow": false
+      }
+    },
+    {
+      "name": "v11-15-rtl-projects",
+      "screenshot": "v11-15-rtl-projects.png",
+      "state": {
+        "route": "projects",
+        "overflow": false
+      }
+    },
+    {
+      "name": "v11-16-mobile-drawer",
+      "screenshot": "v11-16-mobile-drawer.png",
+      "state": {
+        "route": "projects",
+        "overflow": false
+      }
+    }
+  ]
+}

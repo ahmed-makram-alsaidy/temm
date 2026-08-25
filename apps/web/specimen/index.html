@@ -1,0 +1,465 @@
+<!doctype html>
+<html lang="en" dir="ltr" data-theme="dark">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>TEMM Token Specimen — V1 Visual Foundation (dev only)</title>
+<meta name="robots" content="noindex,nofollow">
+<!--
+  DEV-ONLY PROOF SURFACE. Not routed, not bundled, not shipped.
+  Links the REAL production token layer (../src/styles/tokens.css) so this
+  specimen cannot drift from what ships. Open directly in a browser.
+
+  Fonts: the production app bundles Manrope/Alexandria via fontsource; this
+  static specimen loads them (plus the bundled mono) from the CDN purely for
+  standalone fidelity.
+-->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Alexandria:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../src/styles/tokens.css">
+<style>
+  /* specimen chrome only — every design decision below consumes tokens */
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html { background: var(--c-canvas); }
+  body {
+    background: var(--c-canvas); color: var(--c-ink-1);
+    font-family: var(--f-sans); font-size: var(--type-400); line-height: 1.6;
+    font-variant-numeric: tabular-nums; -webkit-font-smoothing: antialiased;
+    transition: background var(--t-struct) var(--e-out), color var(--t-struct) var(--e-out);
+  }
+  [dir='rtl'] body { font-family: var(--f-arabic); }
+  .specimen { max-width: 1120px; margin: 0 auto; padding: var(--sp-6) var(--sp-5) var(--sp-8); }
+
+  .bar { position: sticky; top: 0; z-index: 10; display: flex; align-items: center; gap: var(--sp-2);
+    padding: var(--sp-3) 0; margin-block-end: var(--sp-5);
+    background: color-mix(in srgb, var(--c-canvas) 88%, transparent); backdrop-filter: blur(10px);
+    border-block-end: var(--w-hair) solid var(--c-rule); }
+  .bar h1 { font-size: var(--type-300); font-weight: 750; letter-spacing: .12em; text-transform: uppercase; color: var(--c-ink-3); margin-inline-end: auto; }
+  .bar button {
+    padding: 7px 12px; font: 650 var(--type-200) var(--f-sans); color: var(--c-ink-2);
+    background: transparent; border: var(--w-hair) solid var(--c-line); border-radius: var(--r-chip); cursor: pointer;
+    transition: color var(--t-micro) var(--e-micro), border-color var(--t-micro) var(--e-micro), background var(--t-micro) var(--e-micro);
+  }
+  .bar button:hover { color: var(--c-ink-1); border-color: var(--c-ink-3); }
+  .bar button[aria-pressed='true'] { color: var(--c-canvas); background: var(--c-ink-1); border-color: var(--c-ink-1); }
+  .specimen.greyscale { filter: grayscale(1); }
+
+  section { border-block-start: var(--w-hair) solid var(--c-rule); padding-block: var(--sp-6); }
+  section > h2 {
+    display: flex; align-items: baseline; gap: var(--sp-3);
+    font-size: var(--type-200); font-weight: 750; letter-spacing: .16em; text-transform: uppercase; color: var(--c-ink-3);
+    margin-block-end: var(--sp-4);
+  }
+  [dir='rtl'] section > h2 { letter-spacing: 0; text-transform: none; }
+  section > h2::after { content: ''; flex: 1; height: var(--w-hair); background: var(--c-rule); order: 1; }
+  .note { font-size: var(--type-300); color: var(--c-ink-3); max-width: 72ch; margin-block-end: var(--sp-4); }
+  .note b { color: var(--c-ink-2); font-weight: 650; }
+  .code { font-family: var(--f-mono); font-size: var(--type-200); color: var(--c-ink-3); direction: ltr; unicode-bidi: isolate; }
+
+  /* --- surfaces: L0..L3, rule + space, never cards ------------------- */
+  .surfaces { display: grid; gap: var(--sp-4); }
+  .surf { padding: var(--sp-4) var(--sp-5); border-radius: var(--r-object); font-size: var(--type-300); color: var(--c-ink-2); }
+  .surf b { display: block; color: var(--c-ink-1); font-weight: 700; margin-block-end: 2px; }
+  .surf-l0 { background: var(--c-canvas); border: var(--w-hair) dashed var(--c-line); }
+  .surf-l1 { background: var(--c-station); }
+  .surf-l2 { background: var(--c-object); border: var(--w-hair) solid var(--c-line); }
+  .surf-l3 { background: var(--c-overlay); border: var(--w-hair) solid var(--c-line); box-shadow: var(--shadow-overlay); }
+
+  /* --- type hierarchy ------------------------------------------------ */
+  .typerow { display: grid; grid-template-columns: 128px minmax(0,1fr); gap: var(--sp-4); align-items: baseline; padding-block: var(--sp-2); border-block-end: var(--w-hair) solid var(--c-rule); }
+  .typerow:last-child { border-block-end: 0; }
+  .trole { font-family: var(--f-mono); font-size: var(--type-200); color: var(--c-ink-3); direction: ltr; }
+  .t-goal   { font-size: var(--role-goal); font-weight: 750; line-height: 1.15; letter-spacing: -.02em; color: var(--c-ink-1); }
+  .t-sig    { font-size: var(--role-signature); font-weight: 780; letter-spacing: -.03em; color: var(--c-ink-1); }
+  .t-station{ font-size: var(--role-station); font-weight: 750; color: var(--c-ink-1); }
+  .t-title  { font-size: var(--role-title); font-weight: 650; color: var(--c-ink-1); }
+  .t-sub    { font-size: var(--role-subhead); font-weight: 600; color: var(--c-ink-2); }
+  .t-body   { font-size: var(--role-body); color: var(--c-ink-2); }
+  .t-support{ font-size: var(--role-support); color: var(--c-ink-3); }
+  .t-label  { font-size: var(--role-label); font-weight: 750; letter-spacing: .14em; text-transform: uppercase; color: var(--c-ink-3); }
+  .t-measure{ font-family: var(--f-mono); font-size: var(--role-measure); color: var(--c-ink-2); direction: ltr; unicode-bidi: isolate; }
+  .t-compact{ font-family: var(--f-mono); font-size: var(--role-compact); color: var(--c-ink-3); direction: ltr; unicode-bidi: isolate; }
+
+  /* --- mono: inline measurement inside a sans sentence --------------- */
+  .prose { max-width: 70ch; font-size: var(--role-body); color: var(--c-ink-2); }
+  .prose .m { font-family: var(--f-mono); font-size: var(--type-200); color: var(--c-ink-1); background: var(--c-station); padding: 1px 6px; border-radius: var(--r-chip); direction: ltr; unicode-bidi: isolate; }
+
+  /* --- the eleven states: hue + the non-hue channels ------------------ */
+  .states { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: var(--sp-3); }
+  .state { display: grid; grid-template-columns: 34px minmax(0,1fr); gap: var(--sp-3); align-items: center;
+    padding: var(--sp-3) var(--sp-4); background: var(--c-station); border-radius: var(--r-object); }
+  .state .glyph { width: 34px; height: 34px; display: grid; place-items: center; }
+  .state .glyph svg { display: block; overflow: visible; }
+  .state b { display: block; font-size: var(--type-300); font-weight: 700; color: var(--c-ink-1); }
+  .state span { font-size: var(--type-200); color: var(--c-ink-3); }
+  .state .code { display: block; margin-block-start: 2px; }
+
+  /* --- hairlines & structural stroke ---------------------------------- */
+  .weights { display: grid; gap: var(--sp-3); }
+  .wrow { display: grid; grid-template-columns: 110px minmax(0,1fr); gap: var(--sp-4); align-items: center; }
+  .wline { height: 0; background: var(--c-line); }
+  .chamfer-demo { width: 46px; height: 40px; background: var(--c-ink-1);
+    clip-path: polygon(0 0, 100% 0, 100% calc(100% - var(--chamfer)), calc(100% - var(--chamfer)) 100%, 0 100%); }
+
+  /* --- controls: focus is a ring, hover is luminance, never transform -- */
+  .controls { display: flex; flex-wrap: wrap; gap: var(--sp-3); align-items: center; }
+  .btn { min-height: 42px; padding: 10px 18px; font: 700 var(--type-400) var(--f-sans);
+    color: var(--c-canvas); background: var(--c-ink-1); border: var(--w-hair) solid var(--c-ink-1);
+    border-radius: var(--r-object); cursor: pointer;
+    transition: background var(--t-micro) var(--e-micro), color var(--t-micro) var(--e-micro); }
+  .btn:hover { background: var(--c-ink-max); }
+  .btn:active { background: var(--c-ink-2); }
+  .btn:disabled { color: var(--c-disabled-ink); background: var(--c-station); border-color: var(--c-rule); cursor: not-allowed; }
+  .btn-quiet { color: var(--c-ink-2); background: transparent; border-color: var(--c-line); }
+  .btn-quiet:hover { color: var(--c-ink-1); border-color: var(--c-ink-3); background: var(--c-hover-shift); }
+  .field { min-width: 240px; min-height: 42px; padding: 9px 12px; font: inherit; color: var(--c-ink-1);
+    background: var(--c-object); border: var(--w-hair) solid var(--c-line); border-radius: var(--r-object); }
+  .field::placeholder { color: var(--c-ink-3); }
+  button:focus-visible, input:focus-visible, a:focus-visible, [tabindex]:focus-visible {
+    outline: var(--w-2) solid var(--c-focus); outline-offset: 2px; }
+
+  /* --- earned green vs forbidden green -------------------------------- */
+  .greenlaw { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: var(--sp-4); }
+  .lawpanel { padding: var(--sp-4) var(--sp-5); border-radius: var(--r-object); background: var(--c-station); }
+  .lawpanel h3 { font-size: var(--type-300); font-weight: 750; margin-block-end: var(--sp-3); }
+  .lawpanel ul { list-style: none; display: grid; gap: var(--sp-2); font-size: var(--type-300); color: var(--c-ink-2); }
+  .lawpanel li { display: flex; gap: var(--sp-2); align-items: baseline; }
+  .lawpanel li::before { content: ''; flex: 0 0 auto; width: 7px; height: 7px; translate: 0 -1px; }
+  .law-earned h3 { color: var(--earned-green); }
+  .law-earned li::before { background: var(--earned-green); }
+  .law-forbidden h3 { color: var(--c-clay); }
+  .law-forbidden li::before { background: var(--c-clay); }
+  .earned-fact { display: flex; align-items: center; gap: var(--sp-3); margin-block-start: var(--sp-3);
+    padding: var(--sp-3); border: var(--w-hair) solid color-mix(in srgb, var(--earned-green) 35%, transparent);
+    border-radius: var(--r-object); background: var(--earned-green-soft); }
+  .earned-fact b { color: var(--earned-green); font-weight: 750; }
+  .earned-fact span { font-size: var(--type-300); color: var(--c-ink-2); }
+
+  /* --- closed cell foundation: the state pair ------------------------- */
+  .cells { display: flex; gap: var(--sp-6); align-items: flex-end; flex-wrap: wrap; }
+  .cellbox { display: grid; gap: var(--sp-2); justify-items: center; }
+  .cellbox figcaption { font-size: var(--type-200); color: var(--c-ink-3); font-weight: 700; letter-spacing: .1em; text-transform: uppercase; }
+  .mark { fill: none; stroke-linecap: butt; }
+  .mark-spine { stroke: var(--mark-stroke-closed); }
+  .mark-cell  { stroke: var(--mark-stroke-closed); stroke-linejoin: miter; }
+  .mark-gate  { stroke: var(--mark-gate-earned); }
+  .mark[data-open='true'] .mark-cell { stroke: var(--mark-stroke-open); }
+  .mark[data-open='true'] .mark-spine { stroke: var(--mark-stroke-open); }
+
+  /* --- waiting: truthful, no spinner, no shimmer ---------------------- */
+  .waiting { display: grid; gap: var(--sp-2); max-width: 62ch; }
+  .waitline { display: flex; align-items: center; gap: var(--sp-3); }
+  .waitline .track { flex: 1; height: 0; border-block-start: var(--w-1) dashed var(--c-waiting-gap); }
+  .waitline .livedge { width: 64px; height: 0; border-block-start: var(--w-2) solid var(--state-running); }
+  .waiting p { font-size: var(--role-body); color: var(--c-waiting); }
+  .waiting small { font-size: var(--type-200); color: var(--c-waiting-note); }
+
+  /* --- RTL / Arabic ---------------------------------------------------- */
+  .rtl-demo { border: var(--w-hair) solid var(--c-rule); border-radius: var(--r-object); padding: var(--sp-4) var(--sp-5); background: var(--c-station); }
+  .rtl-demo h3 { font-family: var(--f-arabic); font-size: var(--type-600); font-weight: 650; color: var(--c-ink-1); margin-block-end: var(--sp-2); }
+  .rtl-demo p { font-family: var(--f-arabic); font-size: var(--type-400); color: var(--c-ink-2); max-width: 66ch; }
+  .rtl-demo .m { font-family: var(--f-mono); font-size: var(--type-200); color: var(--c-ink-1); direction: ltr; unicode-bidi: isolate; }
+  .rtl-warn { margin-block-start: var(--sp-3); font-size: var(--type-300); color: var(--c-clay); font-weight: 650; }
+
+  /* --- motion: the two tiers, interruptible --------------------------- */
+  .motion-demo { display: flex; flex-wrap: wrap; gap: var(--sp-3); align-items: center; }
+  .chip { padding: 6px 12px; border-radius: var(--r-capsule); border: var(--w-hair) solid var(--c-line);
+    font-size: var(--type-300); font-weight: 650; color: var(--c-ink-2);
+    transition: color var(--t-micro) var(--e-micro), border-color var(--t-micro) var(--e-micro), background var(--t-micro) var(--e-micro); }
+  .chip[data-on='true'] { color: var(--c-verify); border-color: var(--c-verify); }
+  .panel-morph { inline-size: 220px; padding: var(--sp-3); border-radius: var(--r-object);
+    background: var(--c-station); font-size: var(--type-300); color: var(--c-ink-2);
+    transition: inline-size var(--t-struct) var(--e-out); }
+  .panel-morph[data-open='false'] { inline-size: 84px; color: var(--c-ink-3); }
+  .transit-demo { position: relative; flex: 1 1 260px; height: 2px; background: var(--c-waiting-track); overflow: hidden; }
+  .transit-demo::before { content: ''; position: absolute; inset-block: -1px; inline-size: 56px;
+    background: linear-gradient(90deg, transparent, var(--state-running), transparent);
+    animation: transit var(--transit-cycle) linear infinite; }
+  @keyframes transit { from { inset-inline-start: -56px; } to { inset-inline-start: 100%; } }
+  .transit-note { font-size: var(--type-200); color: var(--c-waiting-note); }
+  :root[data-reduce-motion='true'] .transit-demo::before { display: none; }
+
+  footer { border-block-start: var(--w-hair) solid var(--c-rule); margin-block-start: var(--sp-6); padding-block: var(--sp-5); font-size: var(--type-300); color: var(--c-ink-3); }
+</style>
+</head>
+<body>
+<div class="specimen" id="specimen">
+  <div class="bar">
+    <h1>TEMM · Token Specimen · V1</h1>
+    <button type="button" id="tg-canvas" aria-pressed="true">Graphite</button>
+    <button type="button" id="tg-grey" aria-pressed="false">Greyscale</button>
+    <button type="button" id="tg-rtl" aria-pressed="false">RTL · ع</button>
+    <button type="button" id="tg-reduced" aria-pressed="false">Reduced motion</button>
+  </div>
+
+  <section id="s-surfaces">
+    <h2>Surfaces — four depths, rule and space, never cards</h2>
+    <p class="note"><b>L0 canvas</b> holds the spine. <b>L1 station</b> is a wash separated by hairline + space.
+    <b>L2 object</b> is bordered and interactive. <b>L3 overlay</b> is the only level with a shadow.</p>
+    <div class="surfaces">
+      <div class="surf surf-l0"><b>L0 — --c-canvas</b>The field. Structural, never holds text directly.</div>
+      <div class="surf surf-l1"><b>L1 — --c-station</b>A section of the project story. No border box, no shadow.</div>
+      <div class="surf surf-l2"><b>L2 — --c-object</b>A task, gate, evidence chip. Bordered, interactive.</div>
+      <div class="surf surf-l3"><b>L3 — --c-overlay</b>Modal or sheet. The only shadow in the product.</div>
+    </div>
+  </section>
+
+  <section id="s-type">
+    <h2>Narrative type hierarchy — 8 steps, 12px floor</h2>
+    <div class="typerow"><span class="trole">--role-goal</span><div class="t-goal">Build a bilingual booking site for the dental clinic</div></div>
+    <div class="typerow"><span class="trole">--role-signature</span><div class="t-sig">clinic-booking</div></div>
+    <div class="typerow"><span class="trole">--role-station</span><div class="t-station">Work — the meso spine</div></div>
+    <div class="typerow"><span class="trole">--role-title</span><div class="t-title">Build the booking form</div></div>
+    <div class="typerow"><span class="trole">--role-subhead</span><div class="t-sub">Acceptance evidence, criterion by criterion</div></div>
+    <div class="typerow"><span class="trole">--role-body</span><div class="t-body">Body is the default size and the most used in the product. Everything a person reads starts here.</div></div>
+    <div class="typerow"><span class="trole">--role-support</span><div class="t-support">Supporting meta: quiet facts that travel with the narrative.</div></div>
+    <div class="typerow"><span class="trole">--role-label</span><div class="t-label">Section label — weight and tracking, not size</div></div>
+    <div class="typerow"><span class="trole">--role-measure</span><span class="t-measure">3 files · 1.2s · attempt 2</span></div>
+    <div class="typerow"><span class="trole">--role-compact</span><span class="t-compact">a1b3f9c · 412 KB · 2026-08-24T14:02Z</span></div>
+  </section>
+
+  <section id="s-mono">
+    <h2>Mono — machine-measured fact, inline only</h2>
+    <p class="prose">Sans carries the sentence a person reads; mono carries only the measured fragment
+    inside it. The booking form changed <span class="m">2 files</span> in <span class="m">8.4s</span>
+    across <span class="m">3 attempts</span>, and criterion <span class="m">booking:persist</span> was
+    measured and passed. Squint: the page must read as prose with precise fragments — never as a terminal.</p>
+  </section>
+
+  <section id="s-states">
+    <h2>The eleven semantic states — hue is the fifth channel</h2>
+    <p class="note">Each state differs from every other in at least <b>two</b> of geometry · line · fill ·
+    position. The swatches below show each token's hue and its non-hue channels. Toggle <b>Greyscale</b>:
+    the hues collapse, the channel notes survive. Shared hues are intentional (clay trio, green pair) —
+    geometry separates them in V2 primitives.</p>
+    <div class="states" id="state-grid"></div>
+  </section>
+
+  <section id="s-strokes">
+    <h2>Hairlines, structural stroke, chamfer</h2>
+    <p class="note">Weight is evidence: <span class="code">--w-hair 1 · --w-1 1.5 · --w-2 2 · --w-3 3</span>.
+    Structural corners are 45° chamfers (<span class="code">--chamfer 6px</span>), not radii.</p>
+    <div class="weights">
+      <div class="wrow"><span class="code">--w-hair</span><div class="wline" style="height:var(--w-hair)"></div></div>
+      <div class="wrow"><span class="code">--w-1</span><div class="wline" style="height:var(--w-1)"></div></div>
+      <div class="wrow"><span class="code">--w-2</span><div class="wline" style="height:var(--w-2)"></div></div>
+      <div class="wrow"><span class="code">--w-3</span><div class="wline" style="height:var(--w-3)"></div></div>
+    </div>
+    <div style="display:flex; gap:var(--sp-5); align-items:center; margin-block-start:var(--sp-4)">
+      <div class="chamfer-demo" aria-hidden="true"></div>
+      <span class="note" style="margin:0">Goal cap silhouette — flat top, chamfered base.</span>
+    </div>
+  </section>
+
+  <section id="s-controls">
+    <h2>Controls — focus is a ring, hover is luminance, never a transform</h2>
+    <p class="note">Tab through: <b>focus</b> is a <span class="code">2px</span> offset ring at
+    <span class="code">--c-focus</span>. <b>Hover</b> shifts luminance. <b>Press</b> drops it. Disabled stays perceivable.</p>
+    <div class="controls">
+      <button type="button" class="btn">Primary action</button>
+      <button type="button" class="btn btn-quiet">Secondary</button>
+      <button type="button" class="btn" disabled>Disabled</button>
+      <input class="field" type="text" placeholder="What do you want finished?">
+    </div>
+  </section>
+
+  <section id="s-green">
+    <h2>Green is earned — the binding rule</h2>
+    <div class="greenlaw">
+      <div class="lawpanel law-earned">
+        <h3>Earned — measured and accepted</h3>
+        <ul>
+          <li>Measured accepted evidence</li>
+          <li>Verified completion</li>
+          <li>The closed verification cell</li>
+          <li>The proven deliverable</li>
+        </ul>
+        <div class="earned-fact">
+          <b>✓ Accepted — measured</b>
+          <span>gate open · <span class="code">3/3 criteria passed</span> · rejoined the spine</span>
+        </div>
+      </div>
+      <div class="lawpanel law-forbidden">
+        <h3>Forbidden — never green</h3>
+        <ul>
+          <li>Generic success marketing</li>
+          <li>Availability / “connected” indicators</li>
+          <li>Primary CTAs, links, active navigation</li>
+          <li>Onboarding, empty states, decoration</li>
+        </ul>
+        <div class="earned-fact" style="border-color:color-mix(in srgb, var(--c-clay) 35%, transparent); background:transparent">
+          <b style="color:var(--c-clay)">✗ “All systems operational”</b>
+          <span>availability is not evidence — this stays ink/clay, never green</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="s-mark">
+    <h2>Closed Cell foundation — the state pair</h2>
+    <p class="note">24-unit grid, 90°/45° only, spine overruns the cell. The open cell is the same drawing
+    with the bottom vertex <b>unjoined</b>; verification closes the shape and the gate rule takes earned green.
+    Optical stroke ladder: <span class="code">0.85 + 16/size</span> grid units; below 20px the gate rule is dropped.</p>
+    <div class="cells">
+      <figure class="cellbox">
+        <svg class="mark" data-open="true" width="64" height="64" viewBox="0 0 24 24" role="img" aria-label="Open cell — unverified">
+          <path class="mark-spine" stroke-width="1.1" d="M12 0 L12 24"/>
+          <path class="mark-cell"  stroke-width="1.1" d="M12 4 L19 11 L19 15 L14.5 19.5 M12 4 L5 11 L5 15 L9.5 19.5"/>
+        </svg>
+        <figcaption>Open · 64</figcaption>
+      </figure>
+      <figure class="cellbox">
+        <svg class="mark" data-open="false" width="64" height="64" viewBox="0 0 24 24" role="img" aria-label="Closed cell — verified">
+          <path class="mark-spine" stroke-width="1.1" d="M12 0 L12 24"/>
+          <path class="mark-cell"  stroke-width="1.1" d="M12 4 L19 11 L19 15 L12 22 L5 15 L5 11 Z"/>
+          <path class="mark-gate"  stroke-width="1.1" d="M5 15 L19 15"/>
+        </svg>
+        <figcaption>Closed · 64</figcaption>
+      </figure>
+      <figure class="cellbox">
+        <svg class="mark" data-open="false" width="40" height="40" viewBox="0 0 24 24" role="img" aria-label="Closed cell at 40px">
+          <path class="mark-spine" stroke-width="1.25" d="M12 0 L12 24"/>
+          <path class="mark-cell"  stroke-width="1.25" d="M12 4 L19 11 L19 15 L12 22 L5 15 L5 11 Z"/>
+          <path class="mark-gate"  stroke-width="1.25" d="M5 15 L19 15"/>
+        </svg>
+        <figcaption>Closed · 40</figcaption>
+      </figure>
+      <figure class="cellbox">
+        <svg class="mark" data-open="false" width="24" height="24" viewBox="0 0 24 24" role="img" aria-label="Closed cell at 24px">
+          <path class="mark-spine" stroke-width="1.52" d="M12 0 L12 24"/>
+          <path class="mark-cell"  stroke-width="1.52" d="M12 4 L19 11 L19 15 L12 22 L5 15 L5 11 Z"/>
+          <path class="mark-gate"  stroke-width="1.52" d="M5 15 L19 15"/>
+        </svg>
+        <figcaption>Closed · 24</figcaption>
+      </figure>
+      <figure class="cellbox">
+        <svg class="mark" data-open="false" width="16" height="16" viewBox="0 0 24 24" role="img" aria-label="Closed cell at 16px, gate rule dropped">
+          <path class="mark-spine" stroke-width="1.85" d="M12 0 L12 24"/>
+          <path class="mark-cell"  stroke-width="1.85" d="M12 4 L19 11 L19 15 L12 22 L5 15 L5 11 Z"/>
+        </svg>
+        <figcaption>Closed · 16 · gate dropped</figcaption>
+      </figure>
+    </div>
+  </section>
+
+  <section id="s-waiting">
+    <h2>Waiting — truthful, no spinner, no shimmer</h2>
+    <div class="waiting">
+      <div class="waitline"><span class="livedge"></span><span class="track"></span></div>
+      <p>Waiting for the executor to report changes…</p>
+      <small>No estimate is shown because none has been measured.</small>
+    </div>
+  </section>
+
+  <section id="s-motion">
+    <h2>Motion — two tiers, interruptible; transit is the only continuous motion</h2>
+    <div class="motion-demo">
+      <button type="button" class="chip" id="chip-demo" data-on="false" aria-pressed="false">Micro 180ms — chip state</button>
+      <div class="panel-morph" id="morph-demo" data-open="true">Structural 360ms — the system changed shape</div>
+      <div class="transit-demo" aria-hidden="true"></div>
+    </div>
+    <p class="transit-note" style="margin-block-start:var(--sp-3)">
+      Transit runs on <span class="code">--transit-cycle 1200ms</span>, ≤3 concurrent, and stops instantly —
+      and is suppressed entirely under reduced motion. Nothing else on this page moves on its own.</p>
+  </section>
+
+  <section id="s-rtl" lang="ar" dir="rtl">
+    <h2>العربية — RTL foundation</h2>
+    <div class="rtl-demo">
+      <h3>إنشاء موقع حجز ثنائي اللغة لعيادة الأسنان</h3>
+      <p>الجملة تحكي القصة، والمقياس يبقى اتجاهه من اليسار إلى اليمين داخل النص:
+      <span class="m">2 files · 8.4s</span> — لأن الأرقام والقياسات لا تنعكس.
+      الخط يكبر خطوة بصرية واحدة، والأرضية <span class="m">13px</span> هي الحد الأدنى للعربية.</p>
+      <p class="rtl-warn">لا يوجد نص عربي عمودي — الكتابة الرأسية تكسر اتصال الحروف.</p>
+    </div>
+  </section>
+
+  <footer>
+    V1 visual foundation · tokens: <span class="code">apps/web/src/styles/tokens.css</span> ·
+    reference: <span class="code">docs/TEMM_TOKENS.md</span> · dev-only surface, not routed or bundled.
+  </footer>
+</div>
+
+<script>
+  const $ = (s) => document.querySelector(s);
+  const root = document.documentElement;
+  const press = (btn, on) => btn.setAttribute('aria-pressed', String(on));
+
+  // URL params make every review state reproducible for captures:
+  // ?canvas=chalk &rtl=1 &grey=1 &reduced=1
+  const params = new URLSearchParams(location.search);
+  if (params.get('canvas') === 'chalk') { root.dataset.theme = 'light'; $('#tg-canvas').textContent = 'Chalk'; }
+  if (params.get('grey') === '1') { $('#specimen').classList.add('greyscale'); press($('#tg-grey'), true); }
+  if (params.get('rtl') === '1') { root.dir = 'rtl'; root.lang = 'ar'; press($('#tg-rtl'), true); }
+  if (params.get('reduced') === '1') { root.dataset.reduceMotion = 'true'; press($('#tg-reduced'), true); }
+
+  const STATES = [
+    ['neutral',   'Neutral',         'plain · solid hair · no fill'],
+    ['planned',   'Planning',        'DASHED hair · branch not yet drawn to gate'],
+    ['ready',     'Ready',           'tip cap · solid · short of gate'],
+    ['running',   'Running',         'route glyph · transit ALONG the branch'],
+    ['attention', 'Needs attention', 'notch removed · gap · hatched · promoted'],
+    ['blocked',   'Blocked',         'gap BEFORE gate · hatched · no gate drawn'],
+    ['retrying',  'Retrying',        'parallel offset segment · ghost at 35%'],
+    ['verifying', 'Verifying',       'illumination ACROSS the gate'],
+    ['rejected',  'Rejected',        'flush at closed gate · segment struck'],
+    ['accepted',  'Accepted',        'gate OPEN · through · full weight'],
+    ['complete',  'Complete',        'merged on spine · weight step'],
+  ];
+  const GLYPH = {
+    neutral:   '<rect x="9" y="4" width="16" height="26" rx="8"/><path d="M27 17 H40"/>',
+    planned:   '<rect x="9" y="4" width="16" height="26" rx="8"/><path d="M27 17 H40" stroke-dasharray="3 4"/>',
+    ready:     '<rect x="9" y="4" width="16" height="26" rx="8"/><path d="M27 17 H36"/><path d="M36 12 V22"/>',
+    running:   '<rect x="9" y="4" width="16" height="26" rx="8"/><path d="M27 17 H40"/><path d="M31 13 l6 4 -6 4 Z" fill="var(--state-running)" stroke="none"/>',
+    attention: '<rect x="9" y="4" width="16" height="26" rx="8"/><path d="M27 17 H30"/><path d="M35 17 H40"/><path d="M17 12 l5 5 -5 5 Z" fill="var(--c-canvas)" stroke="none"/>',
+    blocked:   '<rect x="9" y="4" width="16" height="26" rx="8"/><path d="M27 17 H30"/><path d="M35 17 H40" stroke-dasharray="2 4" opacity=".4"/>',
+    retrying:  '<rect x="9" y="4" width="16" height="26" rx="8"/><path d="M27 17 H40"/><path d="M27 24 H38" opacity=".35"/>',
+    verifying: '<rect x="9" y="4" width="16" height="26" rx="8"/><path d="M27 17 H31"/><rect x="32" y="13" width="8" height="8" rx="1"/>',
+    rejected:  '<rect x="9" y="4" width="16" height="26" rx="8"/><path d="M27 17 H31"/><rect x="32" y="13" width="8" height="8" rx="1"/><path d="M33 20 L39 14"/>',
+    accepted:  '<rect x="9" y="4" width="16" height="26" rx="8"/><path d="M27 17 H40"/><rect x="30" y="13" width="8" height="8" rx="1"/>',
+    complete:  '<path d="M5 3 V31" stroke-width="3"/><rect x="9" y="4" width="16" height="26" rx="8"/><path d="M27 17 H40"/>',
+  };
+  $('#state-grid').innerHTML = STATES.map(([k, name, channels]) => `
+    <div class="state">
+      <span class="glyph"><svg width="46" height="34" viewBox="0 0 46 34" fill="none"
+        stroke="var(--state-${k})" stroke-width="1.6" aria-hidden="true">${GLYPH[k]}</svg></span>
+      <span>
+        <b>${name}</b>
+        <span>${channels}</span>
+        <span class="code">--state-${k}</span>
+      </span>
+    </div>`).join('');
+
+  $('#tg-canvas').onclick = (e) => {
+    const dark = root.dataset.theme === 'dark';
+    root.dataset.theme = dark ? 'light' : 'dark';
+    e.target.textContent = dark ? 'Chalk' : 'Graphite';
+    press(e.target, true);
+  };
+  $('#tg-grey').onclick = (e) => {
+    const on = $('#specimen').classList.toggle('greyscale');
+    press(e.target, on);
+  };
+  $('#tg-rtl').onclick = (e) => {
+    const rtl = root.dir === 'rtl';
+    root.dir = rtl ? 'ltr' : 'rtl';
+    root.lang = rtl ? 'en' : 'ar';
+    press(e.target, !rtl);
+  };
+  $('#tg-reduced').onclick = (e) => {
+    const on = root.dataset.reduceMotion !== 'true';
+    root.dataset.reduceMotion = String(on);
+    press(e.target, on);
+  };
+  $('#chip-demo').onclick = (e) => {
+    const on = e.target.dataset.on !== 'true';
+    e.target.dataset.on = String(on);
+    press(e.target, on);
+  };
+  $('#morph-demo').onclick = (e) => {
+    e.target.dataset.open = e.target.dataset.open === 'true' ? 'false' : 'true';
+  };
+</script>
+</body>
+</html>

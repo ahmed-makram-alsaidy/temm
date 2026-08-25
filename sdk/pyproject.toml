@@ -1,0 +1,33 @@
+[build-system]
+requires = ["setuptools>=69", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "temm-sdk"
+version = "0.1.0a1"
+description = "Typed local API client and headless CLI for TEMM — The Completion Runtime"
+license = "Apache-2.0"
+license-files = ["LICENSE"]
+requires-python = ">=3.12"
+dependencies = ["httpx>=0.28,<0.29"]
+keywords = ["temm", "ai", "completion", "runtime", "sdk", "cli"]
+classifiers = [
+    "Development Status :: 3 - Alpha",
+    "Intended Audience :: Developers",
+    "Programming Language :: Python :: 3.12",
+    "Topic :: Software Development :: Libraries",
+]
+
+[project.urls]
+Homepage = "https://github.com/niceteem/temm"
+Documentation = "https://github.com/niceteem/temm/tree/main/docs"
+Issues = "https://github.com/niceteem/temm/issues"
+
+[project.scripts]
+temm = "aifleet_cli:main"
+aifleet = "aifleet_cli:main"
+
+[tool.setuptools]
+py-modules = ["aifleet_cli"]
+packages = ["aifleet_sdk"]
+include-package-data = false

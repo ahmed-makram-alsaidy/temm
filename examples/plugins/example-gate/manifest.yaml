@@ -1,0 +1,10 @@
+id: example-gate
+name: Example Quality Gate
+version: 0.1.0
+protocol: '1.0'
+type: quality_gate
+platforms: [windows, linux, macos]
+capabilities: [quality_gate]
+permissions: []
+entrypoint: adapter.py
+rpc_methods: [health, start]

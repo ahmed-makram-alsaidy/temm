@@ -1,0 +1,251 @@
+/* V9 — global product shell. Converges the application frame (sidebar,
+   topbar, navigation, system status) onto the frozen V1 TEMM vocabulary.
+   Scoped strictly to shell areas: inner legacy pages keep their own styles.
+   Laws: selection is location, not acceptance (ink, never earned green);
+   execution readiness is neutral ink or attention clay; no shell motion
+   beyond luminance/press transitions; 12px type floor via --type tokens. */
+
+.app-container { background: var(--c-canvas); }
+
+.skip-link { background: var(--c-ink-max); color: var(--c-canvas); }
+
+/* ---- Sidebar ---- */
+
+.sidebar {
+  background: var(--c-canvas);
+  border-inline-end: var(--w-hair) solid var(--c-rule);
+}
+
+.brand-mark {
+  border-radius: var(--r-object);
+  background: var(--c-ink-max);
+  color: var(--c-canvas);
+  box-shadow: none;
+}
+
+.brand-name {
+  color: var(--c-ink-max);
+  font-family: var(--f-sans);
+  font-size: var(--type-300);
+  font-weight: 800;
+  letter-spacing: 0.06em;
+}
+
+.brand-subtitle {
+  color: var(--c-ink-3);
+  font-family: var(--f-sans);
+  font-size: var(--type-200);
+  margin-top: 3px;
+}
+
+.mobile-close { color: var(--c-ink-2); }
+
+.new-task-button {
+  min-height: 42px;
+  border: var(--w-hair) solid var(--c-ink-1);
+  border-radius: var(--r-object);
+  background: var(--c-ink-1);
+  color: var(--c-canvas);
+  font-family: var(--f-sans);
+  font-size: var(--type-300);
+  font-weight: 700;
+  transition: background var(--t-micro) var(--e-out);
+}
+.new-task-button:hover { background: var(--c-ink-max); }
+.new-task-button:focus-visible { outline: var(--w-2) solid var(--c-focus); outline-offset: 2px; }
+
+.nav-scroll { padding: var(--sp-2) var(--sp-3) var(--sp-4); }
+
+.nav-label {
+  padding: var(--sp-3) var(--sp-2) var(--sp-1);
+  color: var(--c-ink-3);
+  font-family: var(--f-sans);
+  font-size: var(--type-200);
+  font-weight: 750;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.nav-list { display: flex; flex-direction: column; gap: 2px; }
+.nav-list[data-group='primary'] { margin-bottom: var(--sp-2); }
+
+.nav-item {
+  position: relative;
+  min-height: 40px;
+  display: flex;
+  align-items: center;
+  gap: var(--sp-2);
+  padding: var(--sp-2) var(--sp-3);
+  border: none;
+  border-radius: var(--r-object);
+  background: transparent;
+  color: var(--c-ink-2);
+  font-family: var(--f-sans);
+  font-size: var(--type-300);
+  font-weight: 550;
+  text-align: start;
+  cursor: pointer;
+  transition: background var(--t-micro) var(--e-out), color var(--t-micro) var(--e-out);
+}
+
+.nav-item:hover { color: var(--c-ink-max); background: var(--c-station); }
+.nav-item:focus-visible { outline: var(--w-2) solid var(--c-focus); outline-offset: 2px; }
+
+/* Selection is LOCATION. Ink on object, plus a structural marker bar and
+   aria-current — never a hue, never acceptance green. */
+.nav-item.active { color: var(--c-ink-max); background: var(--c-object); font-weight: 700; }
+.nav-item.active::before {
+  content: '';
+  position: absolute;
+  inset-inline-start: 0;
+  block-size: 56%;
+  inline-size: 3px;
+  border-radius: 2px;
+  background: var(--c-ink-max);
+}
+
+.nav-icon { color: var(--c-ink-3); flex: 0 0 auto; }
+.nav-item:hover .nav-icon,
+.nav-item.active .nav-icon { color: var(--c-ink-max); }
+
+.nav-text {
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.nav-chevron { color: var(--c-ink-3); flex: 0 0 auto; }
+[dir='rtl'] .nav-chevron { transform: scaleX(-1); }
+
+.sidebar-footer {
+  border-top: var(--w-hair) solid var(--c-rule);
+  padding: var(--sp-2) var(--sp-3) var(--sp-3);
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-2);
+}
+
+.sidebar-status {
+  margin: 0;
+  padding: var(--sp-2) var(--sp-3);
+  border: var(--w-hair) solid var(--c-rule);
+  border-radius: var(--r-object);
+  background: transparent;
+}
+
+.status-line { display: flex; align-items: baseline; justify-content: space-between; gap: var(--sp-2); }
+
+.status-title {
+  color: var(--c-ink-3);
+  font-family: var(--f-sans);
+  font-size: var(--type-200);
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+}
+
+/* Readiness is operational truth: neutral ink when ready, attention clay
+   when setup is needed. The words carry the meaning; hue only supports. */
+.status-value {
+  font-family: var(--f-sans);
+  font-size: var(--type-200);
+  font-weight: 700;
+  color: var(--c-ink-2);
+}
+.sidebar-status[data-tone='attention'] .status-value { color: var(--state-attention); }
+
+.status-meta {
+  color: var(--c-ink-3);
+  font-family: var(--f-sans);
+  font-size: var(--type-200);
+  margin-top: var(--sp-1);
+  display: flex;
+  align-items: center;
+  gap: var(--sp-1);
+}
+
+/* ---- Topbar ---- */
+
+.topbar {
+  height: 60px;
+  flex-basis: 60px;
+  background: var(--c-canvas);
+  border-bottom: var(--w-hair) solid var(--c-rule);
+  backdrop-filter: none;
+}
+
+.page-kicker {
+  color: var(--c-ink-3);
+  font-family: var(--f-sans);
+  font-size: var(--type-200);
+  font-weight: 750;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+/* On the desktop the sidebar owns the brand; the header keeps only location. */
+@media (min-width: 901px) {
+  .page-kicker { display: none; }
+}
+
+.page-name {
+  color: var(--c-ink-max);
+  font-family: var(--f-sans);
+  font-size: var(--type-400);
+  font-weight: 700;
+  margin-top: 2px;
+  white-space: nowrap;
+}
+
+.header-search {
+  height: 38px;
+  background: var(--c-station);
+  border: var(--w-hair) solid var(--c-rule);
+  border-radius: var(--r-object);
+}
+.header-search input {
+  color: var(--c-ink-max);
+  font-family: var(--f-sans);
+  font-size: var(--type-300);
+}
+.header-search kbd {
+  font-family: var(--f-mono);
+  font-size: var(--type-200);
+  color: var(--c-ink-3);
+  border: var(--w-hair) solid var(--c-rule);
+  border-radius: var(--r-chip);
+  padding: 1px var(--sp-2);
+}
+
+.icon-action,
+.language-action,
+.menu-toggle {
+  background: transparent;
+  border: var(--w-hair) solid var(--c-rule);
+  border-radius: var(--r-object);
+  color: var(--c-ink-2);
+  transition: background var(--t-micro) var(--e-out), color var(--t-micro) var(--e-out);
+}
+.icon-action:hover,
+.language-action:hover,
+.menu-toggle:hover { color: var(--c-ink-max); background: var(--c-station); }
+.icon-action:focus-visible,
+.language-action:focus-visible,
+.menu-toggle:focus-visible { outline: var(--w-2) solid var(--c-focus); outline-offset: 2px; }
+
+.language-action {
+  font-family: var(--f-sans);
+  font-size: var(--type-200);
+  font-weight: 650;
+}
+
+/* The scanning spinner is the one legacy motion the header keeps; reduced
+   motion freezes it (theme.css already guards the global rule). */
+@media (prefers-reduced-motion: reduce) {
+  .nav-item,
+  .new-task-button,
+  .icon-action,
+  .language-action,
+  .menu-toggle { transition: none; }
+}

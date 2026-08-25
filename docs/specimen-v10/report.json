@@ -1,0 +1,131 @@
+{
+  "shots": [
+    {
+      "name": "v10-projects",
+      "screenshot": "v10-projects.png",
+      "currentRoute": "projects",
+      "h1": "",
+      "smallest": 12,
+      "overflow": false,
+      "greenLeak": 0
+    },
+    {
+      "name": "v10-runs",
+      "screenshot": "v10-runs.png",
+      "currentRoute": "runs",
+      "h1": "Runs",
+      "smallest": 12,
+      "overflow": false,
+      "greenLeak": 0
+    },
+    {
+      "name": "v10-tools",
+      "screenshot": "v10-tools.png",
+      "currentRoute": "fleet",
+      "h1": "Tools",
+      "smallest": 12,
+      "overflow": false,
+      "greenLeak": 0
+    },
+    {
+      "name": "v10-workspaces",
+      "screenshot": "v10-workspaces.png",
+      "currentRoute": "workspaces",
+      "h1": "Workspaces",
+      "smallest": 12,
+      "overflow": false,
+      "greenLeak": 0
+    },
+    {
+      "name": "v10-automation",
+      "screenshot": "v10-automation.png",
+      "currentRoute": "automation",
+      "h1": "Skills & workflows",
+      "smallest": 12,
+      "overflow": false,
+      "greenLeak": 0
+    },
+    {
+      "name": "v10-insights",
+      "screenshot": "v10-insights.png",
+      "currentRoute": "insights",
+      "h1": "Insights",
+      "smallest": 12,
+      "overflow": false,
+      "greenLeak": 0
+    },
+    {
+      "name": "v10-model-lab",
+      "screenshot": "v10-model-lab.png",
+      "currentRoute": "model_lab",
+      "h1": "Benchmarks",
+      "smallest": 12,
+      "overflow": false,
+      "greenLeak": 0
+    },
+    {
+      "name": "v10-system-overview",
+      "screenshot": "v10-system-overview.png",
+      "currentRoute": "dashboard",
+      "h1": "System overview",
+      "smallest": 12,
+      "overflow": false,
+      "greenLeak": 0
+    },
+    {
+      "name": "v10-settings",
+      "screenshot": "v10-settings.png",
+      "currentRoute": "settings",
+      "h1": "Settings",
+      "smallest": 12,
+      "overflow": false,
+      "greenLeak": 0
+    },
+    {
+      "name": "v10-command-console",
+      "screenshot": "v10-command-console.png",
+      "currentRoute": "console",
+      "h1": "Command console",
+      "smallest": 12,
+      "overflow": false,
+      "greenLeak": 0
+    },
+    {
+      "name": "v10-back-to-projects",
+      "screenshot": "v10-back-to-projects.png",
+      "currentRoute": "projects",
+      "h1": "",
+      "smallest": 12,
+      "overflow": false,
+      "greenLeak": 0
+    },
+    {
+      "name": "v10-rtl-system-overview",
+      "screenshot": "v10-rtl-system-overview.png",
+      "currentRoute": "dashboard",
+      "h1": "\u0646\u0638\u0631\u0629 \u0627\u0644\u0646\u0638\u0627\u0645",
+      "smallest": 13,
+      "overflow": false,
+      "greenLeak": 0
+    },
+    {
+      "name": "v10-rtl-tools",
+      "screenshot": "v10-rtl-tools.png",
+      "currentRoute": "fleet",
+      "h1": "\u0627\u0644\u0623\u062f\u0648\u0627\u062a",
+      "smallest": 12,
+      "overflow": false,
+      "greenLeak": 0
+    },
+    {
+      "name": "v10-mobile-system-overview",
+      "screenshot": "v10-mobile-system-overview.png",
+      "currentRoute": "dashboard",
+      "h1": "System overview",
+      "smallest": 12,
+      "overflow": false,
+      "greenLeak": 0
+    }
+  ],
+  "failures": []
+}

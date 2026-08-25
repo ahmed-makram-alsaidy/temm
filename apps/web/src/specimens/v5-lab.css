@@ -1,0 +1,50 @@
+/* V5 motion lab chrome — development-only surface. Consumes V1 tokens only. */
+.temm-v5-lab { min-height: 100vh; }
+
+.temm-v5-lab-rail {
+  position: sticky;
+  top: 0;
+  z-index: 5;
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--sp-3);
+  align-items: center;
+  justify-content: space-between;
+  padding: var(--sp-2) var(--sp-4);
+  background: var(--c-canvas);
+  border-block-end: var(--w-hair) solid var(--c-rule);
+}
+
+.temm-v5-lab-scenarios { display: flex; flex-wrap: wrap; gap: var(--sp-2); }
+.temm-v5-lab-scenarios a {
+  padding: var(--sp-1) var(--sp-2);
+  border: var(--w-hair) solid var(--c-line);
+  border-radius: var(--r-chip);
+  color: var(--c-ink-2);
+  font-size: var(--type-200);
+  text-decoration: none;
+}
+.temm-v5-lab-scenarios a[data-active='true'] {
+  color: var(--c-ink-1);
+  border-color: var(--c-ink-2);
+  background: var(--c-object);
+}
+
+.temm-v5-lab-controls { display: flex; align-items: center; gap: var(--sp-2); }
+.temm-v5-lab-controls button {
+  min-height: 32px;
+  padding: 0 var(--sp-3);
+  border: var(--w-hair) solid var(--c-line);
+  border-radius: var(--r-chip);
+  background: var(--c-object);
+  color: var(--c-ink-1);
+  font-size: var(--type-200);
+}
+.temm-v5-lab-controls button:disabled { opacity: .5; }
+.temm-v5-lab-controls output {
+  color: var(--c-ink-3);
+  font-family: var(--f-mono);
+  font-size: var(--type-200);
+}
+
+.temm-v5-lab-stage { padding-block-end: var(--sp-6); }

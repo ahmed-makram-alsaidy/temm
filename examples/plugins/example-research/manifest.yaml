@@ -1,0 +1,10 @@
+id: example-research
+name: Example Research
+version: 0.1.0
+protocol: '1.0'
+type: research
+platforms: [windows, linux, macos]
+capabilities: [research, network]
+permissions: [network]
+entrypoint: adapter.py
+rpc_methods: [health, start]

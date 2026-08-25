@@ -1,0 +1,79 @@
+name: quality
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  backend:
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [windows-latest, ubuntu-latest]
+    runs-on: ${{ matrix.os }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+          cache: pip
+      - run: python -m pip install --upgrade pip
+      - if: runner.os == 'Windows'
+        run: python -m pip install --require-hashes -r requirements-lock-win.txt
+      - if: runner.os == 'Linux'
+        run: python -m pip install --require-hashes -r requirements-lock-linux.txt
+      - run: python -m core.ai_fleet.license_policy
+      - run: python -m compileall -q core tests
+      - run: python -m unittest tests.test_license_policy tests.test_migrations tests.test_security tests.test_origin_policy tests.test_input_limits
+      - run: python -m unittest tests.test_sdk tests.test_headless_cli tests.test_sdk_distribution
+      - run: python -m unittest discover -s tests -p "test_*.py"
+      - run: python tests/test_e2e.py
+      - run: python -m core.ai_fleet.build_provenance --output build-evidence-a
+      - run: python -m core.ai_fleet.build_provenance --output build-evidence-b
+      - if: runner.os == 'Linux'
+        run: diff -r build-evidence-a build-evidence-b
+      - if: runner.os == 'Windows'
+        shell: pwsh
+        run: |
+          $a = Get-FileHash build-evidence-a/* | Sort-Object Path | Select-Object -ExpandProperty Hash
+          $b = Get-FileHash build-evidence-b/* | Sort-Object Path | Select-Object -ExpandProperty Hash
+          if (Compare-Object $a $b) { throw 'Build evidence differs' }
+
+  frontend:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: apps/web
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: npm
+          cache-dependency-path: apps/web/package-lock.json
+      - run: npm ci
+      - run: npm run lint
+      - run: npx tsc -b --pretty false
+      - run: npm run build
+
+  browser:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+          cache: pip
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: npm
+          cache-dependency-path: apps/web/package-lock.json
+      - run: python -m pip install --upgrade pip
+      - run: python -m pip install --require-hashes -r requirements-lock-win.txt
+      - working-directory: apps/web
+        run: npm ci
+      - working-directory: apps/web
+        run: npm run build
+      - shell: pwsh
+        run: .\tools\quality\browser-gates.ps1 -OutputRoot "$env:RUNNER_TEMP\ai-fleet-browser-gates"

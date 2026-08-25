@@ -1,0 +1,10 @@
+id: example-agent
+name: Example Agent
+version: 0.1.0
+protocol: '1.0'
+type: agent
+platforms: [windows, linux, macos]
+capabilities: [general]
+permissions: []
+entrypoint: adapter.py
+rpc_methods: [detect, version, health, start, stream, cancel]

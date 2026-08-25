@@ -1,0 +1,281 @@
+.temm-closed-cell,
+.temm-evidence-package,
+.temm-gate,
+.temm-connector,
+.temm-failure,
+.temm-attempt-history,
+.temm-status__glyph,
+.temm-node__graphic {
+  display: block;
+  overflow: visible;
+  shape-rendering: geometricPrecision;
+}
+
+.temm-cell__spine,
+.temm-cell__body,
+.temm-cell__gate {
+  fill: none;
+  stroke-width: var(--temm-cell-weight);
+  stroke-linecap: butt;
+  stroke-linejoin: miter;
+}
+
+.temm-cell__spine,
+.temm-cell__body { stroke: var(--mark-stroke-open); }
+.temm-closed-cell[data-state='closed'] .temm-cell__spine,
+.temm-closed-cell[data-state='closed'] .temm-cell__body,
+.temm-evidence-package g[data-state='closed'] .temm-cell__body { stroke: var(--mark-stroke-closed); }
+.temm-cell__gate { stroke: var(--mark-gate-earned); }
+
+.temm-closed-cell[data-state='closed'][data-animate='true'] .temm-cell__lower {
+  stroke-dasharray: 20;
+  animation: temm-cell-close var(--t-struct) var(--e-out) both;
+}
+
+.temm-closed-cell[data-state='closed'][data-animate='true'] .temm-cell__gate {
+  stroke-dasharray: 14;
+  animation: temm-gate-close var(--t-struct-fast) var(--e-out) both;
+}
+
+@keyframes temm-cell-close { from { stroke-dashoffset: 20; } to { stroke-dashoffset: 0; } }
+@keyframes temm-gate-close { from { stroke-dashoffset: 14; } to { stroke-dashoffset: 0; } }
+
+.temm-evidence-package .temm-cell__spine { stroke: var(--mark-stroke-open); }
+
+.temm-directional path,
+.temm-directional rect,
+.temm-node__graphic path,
+.temm-node__graphic rect,
+.temm-status__glyph path,
+.temm-status__glyph rect {
+  vector-effect: non-scaling-stroke;
+}
+
+.temm-gate { width: 140px; max-width: 100%; }
+.temm-gate__branch,
+.temm-gate__dormant-cap,
+.temm-gate__frame,
+.temm-gate__through {
+  fill: none;
+  stroke-linecap: butt;
+  stroke-linejoin: miter;
+}
+.temm-gate__branch { stroke: var(--c-ink-2); stroke-width: var(--w-1); }
+.temm-gate__dormant-cap { stroke: var(--c-line-planned); stroke-width: var(--w-1); }
+.temm-gate__frame { stroke: var(--c-ink-2); stroke-width: var(--w-1); }
+.temm-gate__effect { fill: var(--c-verify); stroke: none; }
+.temm-gate__segment { fill: var(--c-canvas); stroke: var(--c-line); stroke-width: var(--w-hair); }
+.temm-gate__segment[data-result='testing'] { fill: var(--c-station); stroke: var(--state-verifying); stroke-width: var(--w-2); }
+.temm-gate__segment[data-result='pass'] { fill: var(--earned-green); stroke: var(--earned-green); }
+.temm-gate__segment[data-result='fail'] { fill: var(--state-rejected); stroke: var(--state-rejected); }
+.temm-gate__strike { fill: none; stroke: var(--c-canvas); stroke-width: var(--w-2); }
+.temm-gate__through { stroke: var(--earned-green); stroke-width: var(--w-2); }
+.temm-gate[data-state='accepted'] .temm-gate__frame { stroke: var(--earned-green); stroke-dasharray: 12 8; }
+.temm-gate[data-state='accepted'] .temm-gate__effect { fill: var(--earned-green); }
+.temm-gate[data-state='rejected'] .temm-gate__branch,
+.temm-gate[data-state='rejected'] .temm-gate__frame { stroke: var(--state-rejected); }
+
+.temm-connector { width: 148px; max-width: 100%; }
+.temm-connector path { fill: none; stroke-linecap: butt; stroke-linejoin: miter; }
+.temm-connector__main { stroke: var(--c-ink-2); stroke-width: var(--w-1); }
+.temm-connector__cap,
+.temm-connector__tick { stroke: var(--c-ink-1); stroke-width: var(--w-1); }
+.temm-connector__active { stroke: var(--state-running); stroke-width: var(--w-2); }
+.temm-connector__route { stroke: var(--state-running); stroke-width: var(--w-2); }
+.temm-connector__ghost { stroke: var(--c-ink-3); stroke-width: var(--w-hair); stroke-dasharray: 4 4; opacity: .7; }
+.temm-connector__dependency { stroke: var(--state-blocked); stroke-width: var(--w-hair); stroke-dasharray: 2 5; opacity: .55; }
+.temm-connector__effect { fill: var(--state-running); stroke: none; }
+.temm-connector__closed-gate { stroke: var(--state-rejected); stroke-width: var(--w-2); }
+.temm-connector__strike { stroke: var(--c-canvas); stroke-width: var(--w-2); }
+.temm-connector__spine { stroke: var(--earned-green); stroke-width: var(--w-3); }
+.temm-connector__open-gate { stroke: var(--earned-green); stroke-width: var(--w-2); }
+.temm-connector[data-treatment='planned'] .temm-connector__main {
+  stroke: var(--state-planned);
+  stroke-width: var(--w-hair);
+  stroke-dasharray: 5 5;
+}
+.temm-connector[data-treatment='running'] .temm-connector__main,
+.temm-connector[data-treatment='retry'] .temm-connector__main { stroke: var(--state-running); stroke-width: var(--w-2); }
+.temm-connector[data-treatment='blocked'] .temm-connector__main,
+.temm-connector[data-treatment='blocked'] .temm-connector__cap,
+.temm-connector[data-treatment='rejected'] .temm-connector__main { stroke: var(--c-clay); }
+.temm-connector[data-treatment='rejected'] .temm-connector__effect { fill: var(--c-clay); }
+.temm-connector[data-treatment='accepted'] .temm-connector__main { stroke: var(--earned-green); stroke-width: var(--w-2); }
+
+.temm-failure { width: 220px; max-width: 100%; }
+.temm-failure path { fill: none; stroke-linecap: butt; stroke-linejoin: miter; }
+.temm-failure__task { fill: var(--c-object); stroke: var(--c-clay); stroke-width: var(--w-1); }
+.temm-failure__line { stroke: var(--c-clay); stroke-width: var(--w-1); }
+.temm-failure__dependency,
+.temm-failure__vacancy { stroke: var(--c-clay); stroke-width: var(--w-hair); stroke-dasharray: 2 5; opacity: .65; }
+.temm-failure__empty-effect { fill: var(--c-canvas); stroke: var(--c-clay); stroke-width: var(--w-2); }
+.temm-failure__effect { fill: var(--c-clay); stroke: none; }
+.temm-failure__gate { stroke: var(--c-clay); stroke-width: var(--w-2); }
+.temm-failure__strike { stroke: var(--c-canvas); stroke-width: var(--w-2); }
+
+/* Micro spine — the verification receipt at reading size (freeze §3.3).
+   Geometry carries the state: open jambs + through-line = accepted; closed
+   jamb + struck segment = rejected; measuring segments = evaluating. */
+.temm-micro-spine { width: 124px; max-width: 100%; }
+.temm-micro-spine path { fill: none; stroke-linecap: butt; stroke-linejoin: miter; }
+.temm-micro-spine__branch { stroke: var(--c-ink-2); stroke-width: var(--w-1); }
+.temm-micro-spine__effect { fill: var(--c-verify); stroke: none; }
+.temm-micro-spine__jamb { stroke: var(--c-ink-2); stroke-width: var(--w-2); }
+.temm-micro-spine__segment { stroke: var(--c-line); stroke-width: var(--w-2); }
+.temm-micro-spine__segment[data-result='pass'] { stroke: var(--earned-green); }
+.temm-micro-spine__segment[data-result='fail'] { stroke: var(--state-rejected); }
+.temm-micro-spine__segment[data-result='testing'] { stroke: var(--state-verifying); }
+.temm-micro-spine__strike { stroke: var(--c-canvas); stroke-width: var(--w-2); }
+.temm-micro-spine__open-gate,
+.temm-micro-spine__through { stroke: var(--earned-green); stroke-width: var(--w-2); }
+.temm-micro-spine__rejoin { stroke: var(--earned-green); stroke-width: var(--w-3); }
+.temm-micro-spine[data-state='rejected'] .temm-micro-spine__branch,
+.temm-micro-spine[data-state='rejected'] .temm-micro-spine__jamb { stroke: var(--c-clay); }
+.temm-micro-spine[data-state='rejected'] .temm-micro-spine__effect { fill: var(--c-clay); }
+
+.temm-attempt-history { width: 100%; max-width: 600px; }.temm-attempt-history[data-compact='true'] { max-width: 340px; }
+.temm-attempt-history path { fill: none; stroke-linecap: butt; stroke-linejoin: miter; }
+.temm-attempt-history__label {
+  fill: var(--c-ink-2);
+  font: 650 var(--type-200) var(--f-sans);
+  direction: ltr;
+}
+.temm-attempt-history__ghost { stroke: var(--c-ink-3); stroke-width: var(--w-1); opacity: .68; }
+.temm-attempt-history__empty { fill: var(--c-canvas); stroke: var(--c-clay); stroke-width: var(--w-2); }
+.temm-attempt-history__vacancy { stroke: var(--c-clay); stroke-width: var(--w-hair); stroke-dasharray: 2 5; opacity: .65; }
+.temm-attempt-history__effect { fill: var(--c-clay); stroke: none; }
+.temm-attempt-history__effect[data-accepted='true'] { fill: var(--earned-green); }
+.temm-attempt-history__gate { stroke: var(--c-clay); stroke-width: var(--w-2); }
+.temm-attempt-history__strike { stroke: var(--c-canvas); stroke-width: var(--w-2); }
+.temm-attempt-history__accepted { stroke: var(--earned-green); stroke-width: var(--w-2); }
+.temm-attempt-history__open-gate { stroke: var(--earned-green); stroke-width: var(--w-2); }
+.temm-attempt-history__spine { stroke: var(--earned-green); stroke-width: var(--w-3); }
+.temm-attempt-history__tick { stroke: var(--c-ink-2); stroke-width: var(--w-1); }
+
+.temm-status {
+  --temm-status-color: var(--state-neutral);
+  display: inline-grid;
+  grid-template-columns: 72px minmax(0, 1fr);
+  gap: var(--sp-3);
+  align-items: center;
+  min-width: 0;
+  color: var(--temm-status-color);
+}
+.temm-status[data-state='planned'] { --temm-status-color: var(--state-planned); }
+.temm-status[data-state='ready'] { --temm-status-color: var(--state-ready); }
+.temm-status[data-state='running'] { --temm-status-color: var(--state-running); }
+.temm-status[data-state='attention'] { --temm-status-color: var(--state-attention); }
+.temm-status[data-state='blocked'] { --temm-status-color: var(--state-blocked); }
+.temm-status[data-state='retrying'] { --temm-status-color: var(--state-retrying); }
+.temm-status[data-state='verifying'] { --temm-status-color: var(--state-verifying); }
+.temm-status[data-state='rejected'] { --temm-status-color: var(--state-rejected); }
+.temm-status[data-state='accepted'] { --temm-status-color: var(--state-accepted); }
+.temm-status[data-state='complete'] { --temm-status-color: var(--state-complete); }
+.temm-status__glyph { width: 72px; height: 34px; }
+.temm-status__glyph * { stroke-linecap: butt; stroke-linejoin: miter; }
+.temm-status__glyph .sg-capsule,
+.temm-status__glyph .sg-bite { fill: var(--c-canvas); stroke: var(--temm-status-color); stroke-width: var(--w-1); }
+.temm-status__glyph .sg-line,
+.temm-status__glyph .sg-cap,
+.temm-status__glyph .sg-route,
+.temm-status__glyph .sg-gate,
+.temm-status__glyph .sg-open-gate,
+.temm-status__glyph .sg-spine { fill: none; stroke: var(--temm-status-color); stroke-width: var(--w-1); }
+.temm-status__glyph .sg-live { fill: none; stroke: var(--temm-status-color); stroke-width: var(--w-2); }
+.temm-status__glyph .sg-hatch { fill: none; stroke: var(--temm-status-color); stroke-width: var(--w-hair); opacity: .75; }
+.temm-status__glyph .sg-bite-cut { fill: var(--c-canvas); stroke: none; }
+.temm-status__glyph .sg-ghost { fill: none; stroke: var(--temm-status-color); stroke-width: var(--w-hair); stroke-dasharray: 2 4; opacity: .6; }
+.temm-status__glyph .sg-segment { fill: var(--c-canvas); stroke: var(--temm-status-color); stroke-width: var(--w-hair); }
+.temm-status__glyph .sg-segment[data-active='true'] { fill: var(--c-station); stroke-width: var(--w-2); }
+.temm-status__glyph .sg-effect { fill: var(--temm-status-color); stroke: none; }
+.temm-status__glyph .sg-strike { fill: none; stroke: var(--c-canvas); stroke-width: var(--w-2); }
+.temm-status__glyph .sg-complete { fill: var(--c-object); stroke: var(--temm-status-color); stroke-width: var(--w-2); }
+.temm-status__glyph .sg-spine--thin { stroke-width: var(--w-hair); }
+.temm-status__glyph .sg-spine--thick { stroke-width: var(--w-3); }
+.temm-status__glyph[data-state='planned'] .sg-capsule,
+.temm-status__glyph[data-state='planned'] .sg-line { stroke-dasharray: 3 3; }
+.temm-status__glyph[data-state='running'] .sg-capsule,
+.temm-status__glyph[data-state='verifying'] .sg-capsule { stroke-width: var(--w-2); }
+.temm-status__copy { min-width: 0; color: var(--c-ink-1); }
+.temm-status__copy strong { display: block; font-size: var(--type-300); font-weight: 700; line-height: 1.35; }
+.temm-status__copy small { display: block; margin-block-start: 2px; color: var(--c-ink-3); font-size: var(--type-200); line-height: 1.45; }
+
+.temm-node { display: grid; gap: var(--sp-3); justify-items: center; margin: 0; }
+.temm-node__stage { min-height: 76px; display: grid; place-items: center; }
+.temm-node__stage > .temm-gate { width: 112px; }
+.temm-node figcaption { color: var(--c-ink-2); font-size: var(--type-300); font-weight: 700; }
+.temm-node__graphic { width: 112px; height: 64px; }
+.temm-node__graphic path { fill: none; stroke-linecap: butt; stroke-linejoin: miter; }
+.temm-node__graphic .ng-line { stroke: var(--c-line); stroke-width: var(--w-1); }
+.temm-node__graphic .ng-task { fill: var(--c-object); stroke: var(--state-ready); stroke-width: var(--w-1); }
+.temm-node__graphic .ng-run { stroke: var(--state-running); stroke-width: var(--w-2); }
+.temm-node__graphic .ng-tick { stroke: var(--c-ink-2); stroke-width: var(--w-1); }
+.temm-node__graphic .ng-ghost { stroke: var(--c-ink-3); stroke-width: var(--w-hair); stroke-dasharray: 3 4; opacity: .65; }
+.temm-node__graphic .ng-effect { fill: var(--state-running); stroke: none; }
+.temm-node__graphic .ng-effect[data-evidence='true'] { fill: var(--earned-green); }
+.temm-node__graphic .ng-measure { stroke: var(--c-ink-2); stroke-width: var(--w-1); }
+
+.temm-station {
+  border-block-start: var(--w-hair) solid var(--c-rule);
+  padding-block: var(--sp-5);
+}
+.temm-station__header { display: flex; align-items: baseline; gap: var(--sp-3); }
+.temm-station__header span {
+  color: var(--c-ink-3);
+  font-size: var(--type-200);
+  font-weight: 750;
+  letter-spacing: .12em;
+  text-transform: uppercase;
+}
+.temm-station__header strong { color: var(--c-ink-1); font-size: var(--type-300); }
+.temm-station__body { margin-block-start: var(--sp-4); }
+.temm-station--meso { margin-inline-start: var(--sp-5); padding-inline-start: var(--sp-5); border-inline-start: var(--w-1) solid var(--c-line); }
+.temm-station--micro { margin-inline-start: var(--sp-5); padding: var(--sp-4); background: var(--c-station); }
+[dir='rtl'] .temm-station__header span { letter-spacing: 0; text-transform: none; }
+
+@media (prefers-reduced-motion: reduce) {
+  .temm-closed-cell .temm-cell__lower,
+  .temm-closed-cell .temm-cell__gate { animation: none !important; }
+}
+:root[data-reduce-motion='true'] .temm-closed-cell .temm-cell__lower,
+:root[data-reduce-motion='true'] .temm-closed-cell .temm-cell__gate { animation: none !important; }
+
+@media (forced-colors: active) {
+  .temm-closed-cell,
+  .temm-evidence-package,
+  .temm-gate,
+  .temm-connector,
+  .temm-failure,
+  .temm-attempt-history,
+  .temm-status,
+  .temm-node { forced-color-adjust: auto; }
+
+  .temm-status { --temm-status-color: CanvasText !important; }
+  .temm-status__glyph .sg-capsule,
+  .temm-status__glyph .sg-bite,
+  .temm-status__glyph .sg-segment,
+  .temm-status__glyph .sg-complete { fill: Canvas; }
+  .temm-status__glyph .sg-effect { fill: CanvasText; }
+  .temm-status__glyph .sg-strike { stroke: Canvas; }
+
+  .temm-cell__spine,
+  .temm-cell__body,
+  .temm-cell__gate,
+  .temm-directional path,
+  .temm-node__graphic path { stroke: CanvasText !important; }
+  .temm-directional rect,
+  .temm-node__graphic rect { stroke: CanvasText !important; }
+  .temm-gate__effect,
+  .temm-connector__effect,
+  .temm-failure__effect,
+  .temm-attempt-history__effect,
+  .temm-node__graphic .ng-effect { fill: CanvasText !important; }
+  .temm-gate__segment,
+  .temm-failure__empty-effect,
+  .temm-attempt-history__empty,
+  .temm-node__graphic .ng-task { fill: Canvas !important; }
+  .temm-gate__strike,
+  .temm-connector__strike,
+  .temm-failure__strike,
+  .temm-attempt-history__strike { stroke: Canvas !important; }
+}

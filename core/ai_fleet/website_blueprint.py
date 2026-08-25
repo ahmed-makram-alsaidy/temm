@@ -1,0 +1,15 @@
+from .blueprints import BlueprintCondition, BlueprintGate, BlueprintQuestion, BlueprintSection, BlueprintTemplate
+
+
+WEBSITE_TEMPLATE = BlueprintTemplate(
+    "website-production", "1.0", "website", ["coding", "file_read", "file_write", "quality_gate"], [
+        BlueprintSection("outcomes", "Outcomes and users", ["functional"], questions=[BlueprintQuestion("primary-outcome", "What measurable outcome should the website enable?", "text", True), BlueprintQuestion("audiences", "Who are the primary audiences?", "text", True)]),
+        BlueprintSection("content", "Content and information architecture", ["content", "functional"], questions=[BlueprintQuestion("content-owner", "Who owns content accuracy and updates?", "text", True), BlueprintQuestion("locales", "Which languages or locales are required?", "text", False)]),
+        BlueprintSection("experience", "Brand, responsive UX, and accessibility", ["quality", "asset"], gates=[BlueprintGate("accessibility", "accessibility", True, "Accessibility acceptance evidence is required"), BlueprintGate("responsive", "test", True, "Responsive behavior must be verified at agreed breakpoints")], questions=[BlueprintQuestion("brand-source", "What approved brand system and assets apply?", "text", False)]),
+        BlueprintSection("discoverability", "SEO and discoverability", ["quality", "content"], gates=[BlueprintGate("seo-evidence", "evidence", False, "Metadata, indexing, and structured content evidence")]),
+        BlueprintSection("performance", "Performance and reliability", ["nonfunctional", "quality"], gates=[BlueprintGate("performance-budget", "performance", True, "Measured performance budget and test context are required")], questions=[BlueprintQuestion("performance-context", "Which devices, networks, and regions define the performance target?", "text", True)]),
+        BlueprintSection("security", "Security and privacy", ["security", "constraint"], gates=[BlueprintGate("security-review", "security", True, "Threat and data-flow review required")], questions=[BlueprintQuestion("personal-data", "What personal or regulated data is collected?", "text", True)], condition=BlueprintCondition("network")),
+        BlueprintSection("integrations", "External systems and analytics", ["functional", "constraint"], questions=[BlueprintQuestion("integrations", "Which external systems and owners are required?", "text", False), BlueprintQuestion("analytics-consent", "What analytics and consent policy applies?", "text", False)], condition=BlueprintCondition("network")),
+        BlueprintSection("delivery", "Deployment and operations", ["production", "constraint"], gates=[BlueprintGate("deployment", "deployment", True, "Repeatable deployment evidence required"), BlueprintGate("rollback", "deployment", True, "Rollback procedure required"), BlueprintGate("backup", "backup", False, "Backup and restore evidence when state is retained")], questions=[BlueprintQuestion("hosting-constraints", "What hosting, domain, environment, and ownership constraints apply?", "text", True)]),
+    ], {"stack_policy": "implementation_stack_not_prescribed"}
+).validate()

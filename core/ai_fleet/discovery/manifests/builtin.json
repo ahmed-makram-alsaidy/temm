@@ -1,0 +1,109 @@
+[
+  {
+    "id": "opencode-cli",
+    "name": "OpenCode",
+    "kind": "agent",
+    "executables": ["opencode"],
+    "version_probe": {"args": ["--version"], "timeout_seconds": 3, "pattern": "\\d+\\.\\d+"},
+    "capabilities": ["general", "coding", "shell", "file_read", "file_write", "streaming", "tool_calling", "model_selection"],
+    "auth": {"required": true, "method": "provider_credentials", "setup_instructions": "Configure AI providers via opencode providers login.", "probe": {"args": ["providers", "list"], "parser": {"type": "output_regex", "pattern": "\\d+ credentials"}}},
+    "common_locations": {"windows": ["%APPDATA%\\npm\\opencode.cmd"]},
+    "execution": {"args": ["run", "{prompt}", "--format", "json"], "input_method": "argument", "output_method": "stdout", "working_directory": "workspace"}
+  },
+  {
+    "id": "antigravity-cli",
+    "name": "Antigravity",
+    "kind": "agent",
+    "executables": ["agy"],
+    "version_probe": {"args": ["--version"], "timeout_seconds": 20, "pattern": "\\d+\\.\\d+"},
+    "capabilities": ["general", "coding", "shell", "file_read", "file_write", "streaming", "tool_calling", "model_selection"],
+    "auth": {"required": true, "method": "account_or_api_key", "setup_instructions": "Authenticate via Google account or API key.", "probe": {"args": ["models"], "parser": {"type": "output_regex", "pattern": "gemini"}}},
+    "common_locations": {"windows": ["%LOCALAPPDATA%\\agy\\bin\\agy.exe"]},
+    "execution": {"args": ["--new-project", "--add-dir", "{workspace}", "--mode=accept-edits", "--print={prompt}"], "input_method": "argument", "output_method": "stdout", "working_directory": "workspace"}
+  },
+  {
+    "id": "qwen-code",
+    "name": "Qwen Code CLI",
+    "kind": "agent",
+    "executables": ["qwen-code"],
+    "version_probe": {"args": ["--version"], "timeout_seconds": 3, "pattern": "(?i)(qwen|version|\\d+\\.\\d+)"},
+    "capabilities": ["coding", "shell", "file_read", "file_write", "streaming"],
+    "auth": {"required": true, "method": "account_or_api_key", "setup_instructions": "Authenticate this CLI using its official login or credential setup flow."},
+    "common_locations": {"windows": ["%APPDATA%\\npm\\qwen-code.cmd"]},
+    "execution": {"args": ["--prompt", "{prompt}"], "input_method": "argument", "output_method": "stdout", "working_directory": "workspace"}
+  },
+  {
+    "id": "claude-code",
+    "name": "Claude Code",
+    "kind": "agent",
+    "executables": ["claude"],
+    "version_probe": {"args": ["--version"], "timeout_seconds": 3, "pattern": "(?i)(claude|\\d+\\.\\d+)"},
+    "capabilities": ["coding", "shell", "file_read", "file_write", "streaming", "tool_calling"],
+    "auth": {"required": true, "method": "account_or_api_key", "setup_instructions": "Authenticate this CLI using its official login or credential setup flow.", "probe": {"args": ["auth", "status"], "parser": {"type": "json_field", "path": "loggedIn", "equals": true}}},
+    "common_locations": {"windows": ["%APPDATA%\\npm\\claude.cmd"]},
+    "execution": {"args": ["-p", "{prompt}"], "input_method": "argument", "output_method": "stdout", "working_directory": "workspace"}
+  },
+  {
+    "id": "codex-cli",
+    "name": "OpenAI Codex CLI",
+    "kind": "agent",
+    "executables": ["codex"],
+    "version_probe": {"args": ["--version"], "timeout_seconds": 3, "pattern": "(?i)(codex|\\d+\\.\\d+)"},
+    "capabilities": ["coding", "shell", "file_read", "file_write", "streaming", "tool_calling"],
+    "auth": {"required": true, "method": "account_or_api_key", "setup_instructions": "Authenticate this CLI using its official login or credential setup flow.", "probe": {"args": ["login", "status"], "parser": {"type": "output_regex", "pattern": "(?i)logged in"}}},
+    "common_locations": {"windows": ["%APPDATA%\\npm\\codex.cmd"]},
+    "execution": {"args": ["exec", "--sandbox", "workspace-write", "--skip-git-repo-check", "--ephemeral", "--color", "never", "{prompt}"], "input_method": "argument", "output_method": "stdout", "working_directory": "workspace"}
+  },
+  {
+    "id": "aider-agent",
+    "name": "Aider",
+    "kind": "agent",
+    "executables": ["aider"],
+    "version_probe": {"args": ["--version"], "timeout_seconds": 3, "pattern": "(?i)(aider|\\d+\\.\\d+)"},
+    "capabilities": ["coding", "file_read", "file_write", "streaming", "git", "model_selection"],
+    "auth": {"required": true, "method": "provider_credentials", "setup_instructions": "Configure a supported model provider credential before execution."},
+    "common_locations": {"windows": ["%APPDATA%\\Python\\Scripts\\aider.exe"]},
+    "execution": {"args": ["--message", "{prompt}", "--yes"], "input_method": "argument", "output_method": "stdout", "working_directory": "workspace"}
+  },
+  {
+    "id": "ollama-runner",
+    "name": "Ollama Runtime",
+    "kind": "runtime",
+    "executables": ["ollama"],
+    "version_probe": {"args": ["--version"], "timeout_seconds": 3, "pattern": "(?i)(ollama|\\d+\\.\\d+)"},
+    "capabilities": ["general", "offline", "stdin", "streaming", "model_selection"],
+    "common_locations": {"windows": ["%LOCALAPPDATA%\\Programs\\Ollama\\ollama.exe"]},
+    "execution": {"args": ["run", "{model}", "{prompt}"], "input_method": "argument", "output_method": "stdout", "working_directory": "inherit"}
+  },
+  {
+    "id": "gemini-cli",
+    "name": "Gemini CLI",
+    "kind": "agent",
+    "executables": ["gemini"],
+    "version_probe": {"args": ["--version"], "timeout_seconds": 3, "pattern": "(?i)(gemini|\\d+\\.\\d+)"},
+    "capabilities": ["general", "coding", "shell", "file_read", "streaming", "tool_calling", "image_input"],
+    "auth": {"required": true, "method": "account_or_api_key", "setup_instructions": "Authenticate this CLI using its official login or credential setup flow."},
+    "common_locations": {"windows": ["%APPDATA%\\npm\\gemini.cmd"]},
+    "execution": {"args": ["{prompt}"], "input_method": "argument", "output_method": "stdout", "working_directory": "workspace"}
+  },
+  {
+    "id": "node-cli",
+    "name": "Node.js Runtime",
+    "kind": "runtime",
+    "executables": ["node"],
+    "version_probe": {"args": ["--version"], "timeout_seconds": 3, "pattern": "^v?\\d+\\.\\d+"},
+    "capabilities": [],
+    "common_locations": {"windows": ["%ProgramFiles%\\nodejs\\node.exe"]},
+    "execution": {"args": [], "input_method": "argument", "output_method": "stdout", "working_directory": "inherit"}
+  },
+  {
+    "id": "python-cli",
+    "name": "Python Runtime",
+    "kind": "runtime",
+    "executables": ["python", "python3"],
+    "version_probe": {"args": ["--version"], "timeout_seconds": 3, "pattern": "(?i)^Python \\d+\\.\\d+"},
+    "capabilities": [],
+    "common_locations": {"windows": []},
+    "execution": {"args": [], "input_method": "argument", "output_method": "stdout", "working_directory": "inherit"}
+  }
+]

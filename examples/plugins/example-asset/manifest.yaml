@@ -1,0 +1,10 @@
+id: example-asset
+name: Example Asset Source
+version: 0.1.0
+protocol: '1.0'
+type: asset_source
+platforms: [windows, linux, macos]
+capabilities: [asset_search, network]
+permissions: [network]
+entrypoint: adapter.py
+rpc_methods: [health, start]

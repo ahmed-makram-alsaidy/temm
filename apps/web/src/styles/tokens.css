@@ -1,0 +1,295 @@
+/* ==========================================================================
+   TEMM SEMANTIC TOKEN LAYER — V1 VISUAL FOUNDATION
+   Freeze: docs/TEMM_VISUAL_EXPERIENCE_DIRECTION.md (rev 2), §5 §6 §7 §8 §9.
+   Reference proof: D:\temm-visual-proof (approved, do not copy wholesale).
+
+   WHAT THIS FILE IS
+     The canonical semantic API for TEMM's visual language:
+     THE SPINE AND THE BRANCH / ORCHESTRATION MADE VISIBLE.
+     Consumed by new primitives from V2 onward. Existing components keep the
+     legacy variables in theme.css until their slice migrates them — this file
+     recolors nothing by itself.
+
+   CANVAS MAPPING
+     The existing theme toggle selects the canvas:
+       data-theme='light' -> CHALK  (light, secondary canvas)
+       data-theme='dark'  -> GRAPHITE (dark, primary canvas)
+     Graphite is the product's primary identity (freeze §9.5); Chalk is fully
+     supported. Both palettes are calibrated in the approved proof and pass
+     freeze §5.3 contrast (see docs/TEMM_TOKENS.md for measured ratios).
+
+   THE TWO LAWS THIS LAYER ENCODES
+     GREEN IS EARNED      --state-accepted / --state-complete / --earned-green
+                          are the ONLY green tokens, reserved for measured,
+                          accepted, verified facts (freeze §5 colour law).
+     TWO-CHANNEL LAW      state hues never carry meaning alone; geometry, line,
+                          fill and position carry state (freeze §5). Tokens
+                          here are the fifth channel.
+   ========================================================================== */
+
+:root {
+  /* ------------------------------------------------------------------ *
+   *  SURFACES — four depth levels, depth not colour (freeze §9.4)      *
+   * ------------------------------------------------------------------ */
+  --c-canvas:        #f4f1ea;   /* L0 the field. Holds the spine, never text directly */
+  --c-station:       #efebe2;   /* L1 station wash — separated by rule + space, never a card */
+  --c-object:        #ffffff;   /* L2 object fill — tasks, inputs, chips. Bordered, interactive */
+  --c-overlay:       #ffffff;   /* L3 modal/sheet — the ONLY level with a shadow */
+
+  /* ------------------------------------------------------------------ *
+   *  LINES — hairlines carry structure; weight is information          *
+   * ------------------------------------------------------------------ */
+  --c-rule:          #e0dbd0;   /* decorative hairline, carries no state (exempt from §5.3) */
+  --c-line:          #c6bfb2;   /* structural line — borders, connectors at rest */
+  --c-line-planned:  #8f8778;   /* dashed planned stroke — 3.2:1 non-text on canvas */
+
+  /* ------------------------------------------------------------------ *
+   *  INK — sans is human narrative, mono is machine-measured fact       *
+   * ------------------------------------------------------------------ */
+  --c-ink-3:         #6e685e;   /* quiet/meta text — 4.9:1 on canvas */
+  --c-ink-2:         #4c473f;   /* secondary narrative — 8.2:1 on canvas */
+  --c-ink-1:         #1a1815;   /* primary narrative — 15.5:1 on canvas */
+  --c-ink-max:       #000000;   /* maximum-ink moments (Chalk: press states) */
+
+  /* ------------------------------------------------------------------ *
+   *  SIGNAL — luminance first, hue second (freeze §9.5).               *
+   *  On Chalk "illuminated" INVERTS to "most-inked": the live line is  *
+   *  the darkest line on screen, not the brightest.                    *
+   * ------------------------------------------------------------------ */
+  --c-live:          #2b2113;   /* running — most-inked, not brightest */
+  --c-live-head:     #120c04;   /* transit head — the darkest mark on the canvas */
+  --c-verify:        #1d3a5c;   /* verifying — cool steel illumination */
+  --c-clay:          #96482c;   /* attention / blocked / rejected — NOT alarm red, 6.4:1 */
+  --c-green:         #0f7a4d;   /* EARNED ONLY — 4.8:1 on Chalk. See colour law above */
+  --hatch:           #96482c2e; /* hatched state fill (blocked/attention), greyscale-legible */
+
+  /* ------------------------------------------------------------------ *
+   *  ELEVATION — used exactly once (freeze §9.4). No card shadows.     *
+   * ------------------------------------------------------------------ */
+  --elev-0:          none;
+  --shadow-overlay:  0 20px 48px rgba(40, 34, 24, .18);   /* L3 only */
+
+  /* ------------------------------------------------------------------ *
+   *  FAMILIES — sans narrative / mono measurement / Arabic companion.   *
+   *  Mono ships a bundled fallback (JetBrains Mono) so hashes and      *
+   *  receipts never render machine-dependently (freeze §8.4).          *
+   * ------------------------------------------------------------------ */
+  --f-sans:          'Manrope Variable', 'Manrope', Inter, 'Segoe UI', system-ui, sans-serif;
+  --f-arabic:        'Alexandria Variable', 'Alexandria', Tahoma, sans-serif;
+  --f-mono:          'JetBrains Mono', 'Cascadia Code', 'SF Mono', 'SFMono-Regular', Consolas, 'Liberation Mono', monospace;
+
+  /* ------------------------------------------------------------------ *
+   *  TYPE SCALE — 8 steps, base 15px, ratio 1.2 (freeze §8.5).         *
+   *  12px is the absolute floor. No size outside this scale may be     *
+   *  introduced. Legacy font-size declarations migrate per slice.      *
+   * ------------------------------------------------------------------ */
+  --type-900: 43px;   /* goal — one per screen, often zero */
+  --type-800: 36px;   /* deliverable name — signature moments */
+  --type-700: 26px;   /* station heading */
+  --type-600: 22px;   /* object title — task, requirement */
+  --type-500: 18px;   /* sub-heading, emphasised value */
+  --type-400: 15px;   /* body — the default, the most-used size */
+  --type-300: 13px;   /* secondary, supporting */
+  --type-200: 12px;   /* FLOOR — labels, mono chips */
+
+  /* Semantic type ROLES — the recommended API. Aliased to scale steps.  */
+  --role-goal:       var(--type-900);
+  --role-signature:  var(--type-800);
+  --role-station:    var(--type-700);
+  --role-title:      var(--type-600);
+  --role-subhead:    var(--type-500);
+  --role-body:       var(--type-400);
+  --role-support:    var(--type-300);
+  --role-label:      var(--type-200);   /* eyebrows/labels: weight + tracking, never size, do the work */
+  --role-measure:    var(--type-200);   /* mono, inline only (freeze §8.3) */
+  --role-compact:    var(--type-200);   /* densest technical text; still >= floor */
+
+  /* ------------------------------------------------------------------ *
+   *  SPACING — 4px base, 8 steps (freeze §9.1). Station rhythm:        *
+   *  32 internal, 48 between. No value outside the scale.              *
+   * ------------------------------------------------------------------ */
+  --sp-1: 4px;
+  --sp-2: 8px;
+  --sp-3: 12px;
+  --sp-4: 16px;
+  --sp-5: 24px;
+  --sp-6: 32px;
+  --sp-7: 48px;
+  --sp-8: 64px;
+
+  /* ------------------------------------------------------------------ *
+   *  RADII — 4 values (freeze §9.2). Goal cap, requirement square and  *
+   *  the seal use CHAMFERS, not radii: a 6px 45-degree corner cut.     *
+   * ------------------------------------------------------------------ */
+  --r-chip: 4px;
+  --r-object: 8px;
+  --r-overlay: 14px;
+  --r-capsule: 999px;      /* task capsules ONLY — semantic shape, not decoration */
+  --chamfer: 6px;          /* 45-degree structural corner cut */
+
+  /* ------------------------------------------------------------------ *
+   *  LINE WEIGHTS — the spine's evidence-accumulation scale.           *
+   *  Weight steps encode accumulated evidence; never decorative.       *
+   * ------------------------------------------------------------------ */
+  --w-hair: 1px;
+  --w-1: 1.5px;
+  --w-2: 2px;
+  --w-3: 3px;
+
+  /* ------------------------------------------------------------------ *
+   *  MOTION — two tiers, chain law, sustained transit (freeze §6).     *
+   *  Permitted ONLY for work in transit or the direct consequence of   *
+   *  a user action. Interruptible: always.                             *
+   * ------------------------------------------------------------------ */
+  --t-micro: 180ms;        /* 120-220ms — hover, press, chip change, disclosure */
+  --t-press: 120ms;        /* press luminance drop */
+  --t-struct: 360ms;       /* 280-450ms — the system changed shape */
+  --t-struct-fast: 280ms;
+  --t-struct-slow: 450ms;  /* nothing exceeds 450ms in a single movement */
+  --e-micro: cubic-bezier(0.33, 0.9, 0.4, 1);            /* standard ease-out */
+  --e-out: cubic-bezier(0.22, 0.85, 0.24, 1);            /* decelerate-heavy, no overshoot */
+  --chain-max: 1400ms;     /* chain law ceiling; <= 6 steps, 40-80ms overlap */
+  --chain-overlap: 60ms;
+  --transit-cycle: 1200ms; /* sustained transit; the ONLY continuous motion */
+  --transit-max-cycles: 3; /* then aggregate: one transit + a count */
+
+  /* ------------------------------------------------------------------ *
+   *  WAITING — truthful waiting primitives (freeze §14.3).             *
+   *  A wait states what is awaited and that no estimate exists unless  *
+   *  one was measured. Never a fake percentage, ETA, spinner, shimmer  *
+   *  or unmeasured progress bar.                                       *
+   * ------------------------------------------------------------------ */
+  --c-waiting: var(--c-ink-2);
+  --c-waiting-note: var(--c-ink-3);
+  --c-waiting-track: var(--c-line);        /* the line ahead of live work */
+  --c-waiting-gap: var(--c-rule);          /* the gap IS the message */
+
+  /* ------------------------------------------------------------------ *
+   *  FOCUS / INTERACTION (freeze §9.6)                                 *
+   * ------------------------------------------------------------------ */
+  --c-focus: #1d3a5c;      /* 2px offset ring, >= 3:1 on both surfaces */
+  --c-hover-shift: color-mix(in srgb, var(--c-ink-1) 6%, transparent);
+  --c-press-shift: color-mix(in srgb, var(--c-ink-1) 14%, transparent);
+  --c-disabled-ink: color-mix(in srgb, var(--c-ink-2) 45%, transparent);
+
+  /* ------------------------------------------------------------------ *
+   *  SEMANTIC STATES — the eleven (freeze §5.1).                       *
+   *  Hue is the FIFTH channel and never counts toward the two          *
+   *  channels that distinguish states; geometry/line/fill/position     *
+   *  carry state in V2+ primitives. Each entry: [hue rationale].       *
+   * ------------------------------------------------------------------ */
+  --state-neutral:   var(--c-ink-3);   /* plain, solid hair, no fill */
+  --state-planned:   var(--c-line-planned); /* DASHED hair, off-spine */
+  --state-ready:     var(--c-ink-1);   /* tip cap, solid, short of gate */
+  --state-running:   var(--c-live);    /* route glyph + transit along branch */
+  --state-attention: var(--c-clay);    /* notch removed, gap, hatched, promoted */
+  --state-blocked:   var(--c-clay);    /* gap BEFORE gate, hatched, no gate drawn */
+  --state-retrying:  var(--c-live);    /* parallel offset, ghost at 35% */
+  --state-verifying: var(--c-verify);  /* illumination ACROSS the gate */
+  --state-rejected:  var(--c-clay);    /* flush at closed gate, segment struck */
+  --state-accepted:  var(--c-green);   /* gate OPEN, through, full weight */
+  --state-complete:  var(--c-green);   /* merged on spine, weight step */
+
+  /* EARNED GREEN — the only saturated hue in the product.              *
+   * Permitted exclusively for: measured accepted evidence, verified    *
+   * completion, the closed verification cell, the proven deliverable.  *
+   * Forbidden: success marketing, availability, CTAs, onboarding,      *
+   * active nav, generic connected states (freeze §5 colour law).       */
+  --earned-green: var(--c-green);
+  --earned-green-soft: color-mix(in srgb, var(--c-green) 12%, transparent);
+
+  /* ------------------------------------------------------------------ *
+   *  CLOSED CELL FOUNDATION — the Verification Seal (freeze §7).       *
+   *  24-unit grid, 90/45 degrees only, stroke overruns the cell.       *
+   *  V2 builds the component; V1 fixes the construction constants.     *
+   * ------------------------------------------------------------------ */
+  --mark-grid: 24;                       /* construction grid, units */
+  --mark-cell-vertices: 12 4 19 11 19 15 12 22 5 15 5 11;  /* hexagon, doc/reference */
+  --mark-gate-y: 15;                     /* gate rule sits on the lower chamfer line */
+  /* Optical weight ladder, grid units per rendered size — holds ~equal ink
+     across the size set (prototype finding: a constant stroke reads chunky at
+     64px and vanishes at 16px). Below 20px the gate rule is DROPPED. */
+  --mark-weight-formula: 0.85 + (16 / size);
+  --mark-weight-64: 1.1;                 /* grid units -> ~2.9px rendered */
+  --mark-weight-40: 1.25;                /* -> ~2.1px */
+  --mark-weight-24: 1.52;                /* -> ~1.5px */
+  --mark-weight-16: 1.85;                /* -> ~1.2px */
+  --mark-stroke-open: var(--c-ink-3);    /* open cell — work is out, nothing claimed */
+  --mark-stroke-closed: var(--c-ink-1);  /* closed cell — ink, with earned gate */
+  --mark-gate-earned: var(--earned-green); /* the gate rule is the only green in the mark */
+
+  /* Viewport tiers (freeze §11.1) — for container queries in V2+ */
+  --bp-mobile: 760px;
+  --bp-tablet: 1200px;
+  --bp-wide: 1600px;
+}
+
+/* ==========================================================================
+   GRAPHITE — dark, primary canvas. Warm-neutral, deliberately NOT blue-black
+   (blue-black is the AI-product tell, freeze §9.5).
+   Contrast ratios computed against --c-canvas #12110f (L=0.0052).
+   ========================================================================== */
+:root[data-theme='dark'] {
+  --c-canvas:        #12110f;
+  --c-station:       #171614;   /* L1 — 1.15:1 lift over canvas, separation by rule + space */
+  --c-object:        #1d1b18;   /* L2 */
+  --c-overlay:       #201e1a;   /* L3 */
+
+  --c-rule:          #262420;   /* decorative hairline, non-informational, exempt */
+  --c-line:          #3a3731;   /* structural line */
+  --c-line-planned:  #6b6660;   /* dashed planned stroke — 3.4:1 non-text PASS 1.4.11 */
+
+  --c-ink-3:         #837d74;   /* quiet text — 4.7:1 PASS AA */
+  --c-ink-2:         #9b958c;   /* secondary — 6.4:1 PASS AA */
+  --c-ink-1:         #e8e4dd;   /* primary — 15.8:1 PASS AAA */
+  --c-ink-max:       #fbf9f5;
+
+  --c-live:          #fff1d6;   /* running — 17.0:1, warm illumination, not amber brand */
+  --c-live-head:     #fffaf0;   /* transit head — brightest thing on screen */
+  --c-verify:        #cfe0f2;   /* verifying — 14.1:1, cool steel illumination */
+  --c-clay:          #c0765c;   /* attention/blocked/rejected — 5.4:1 PASS AA, NOT alarm red */
+  --c-green:         #3ec98b;   /* EARNED ONLY — 9.1:1, the payoff must never be marginal */
+  --hatch:           #c0765c33;
+
+  --shadow-overlay:  0 24px 64px rgba(0, 0, 0, .55);
+  --c-focus:         #cfe0f2;
+}
+
+/* ==========================================================================
+   ARABIC / RTL TYPOGRAPHY FOUNDATION (freeze §8.4, §12)
+   - Arabic reads one optical step larger; the empirical floor is 13px for the
+     two smallest steps (validated in the approved prototype with Alexandria).
+   - No decorative vertical Arabic text: vertical writing breaks Arabic joining.
+   - No Latin letter-spacing assumptions: tracking is removed for Arabic where
+     it was doing Latin optical work.
+   - Measured values inside Arabic prose stay dir=ltr in the mono family.
+   ========================================================================== */
+[dir='rtl'] {
+  --type-200: 13px;   /* empirical Arabic floor — resolves freeze question §21.2 */
+  --type-300: 14px;
+  --type-400: 16px;
+}
+
+/* ==========================================================================
+   REDUCED MOTION PRIMITIVES (freeze §6.5)
+   Removes travel, preserves state. Components opt in per structural event in
+   V5; the global zeroing below is the existing blunt safety net and stays.
+   ========================================================================== */
+@media (prefers-reduced-motion: reduce) {
+  :root {
+    --t-micro: 1ms;
+    --t-press: 1ms;
+    --t-struct: 1ms;
+    --t-struct-fast: 1ms;
+    --t-struct-slow: 1ms;
+    --transit-cycle: 0ms;   /* sustained transit is suppressed entirely */
+  }
+}
+:root[data-reduce-motion='true'] {
+  --t-micro: 1ms;
+  --t-press: 1ms;
+  --t-struct: 1ms;
+  --t-struct-fast: 1ms;
+  --t-struct-slow: 1ms;
+  --transit-cycle: 0ms;
+}

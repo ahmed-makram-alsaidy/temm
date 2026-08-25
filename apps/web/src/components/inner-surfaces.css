@@ -1,0 +1,171 @@
+/* V10 — legacy inner surfaces, light convergence. Scoped to the seven
+   audited pages plus the system overview. Laws: 12px type floor via --type
+   tokens (catch-all first, hierarchy overrides after); earned green never
+   appears (connected/enabled/verified-tool are operational, not acceptance);
+   status dots are neutral ink or attention clay; no animation. The Command
+   Console interior stays mono-first by design — only its surrounding
+   hierarchy and floor are treated here. */
+
+.insights-page, .fleet-page, .settings-page, .model-lab-page, .automation-page,
+.workspaces-page, .console-page, .home-page {
+  font-family: var(--f-sans);
+}
+
+/* ---- The 12px floor: every text-bearing element in these pages ---- */
+/* Catch-all first; the more specific hierarchy rules below win the cascade. */
+.insights-page :is(p, div, span, small, strong, b, em, code, label, button, a, li, dt, dd, summary, kbd, option, input, select, textarea, th, td, pre),
+.fleet-page :is(p, div, span, small, strong, b, em, code, label, button, a, li, dt, dd, summary, kbd, option, input, select, textarea, th, td, pre),
+.settings-page :is(p, div, span, small, strong, b, em, code, label, button, a, li, dt, dd, summary, kbd, option, input, select, textarea, th, td, pre),
+.model-lab-page :is(p, div, span, small, strong, b, em, code, label, button, a, li, dt, dd, summary, kbd, option, input, select, textarea, th, td, pre),
+.automation-page :is(p, div, span, small, strong, b, em, code, label, button, a, li, dt, dd, summary, kbd, option, input, select, textarea, th, td, pre),
+.workspaces-page :is(p, div, span, small, strong, b, em, code, label, button, a, li, dt, dd, summary, kbd, option, input, select, textarea, th, td, pre),
+.console-page :is(p, div, span, small, strong, b, em, code, label, button, a, li, dt, dd, summary, kbd, option, input, select, textarea, th, td, pre),
+.home-page :is(p, div, span, small, strong, b, em, code, label, button, a, li, dt, dd, summary, kbd, option, input, select, textarea, th, td, pre) {
+  font-size: var(--type-200) !important;
+}
+
+/* A few legacy sub-floor headings sit outside the tag catch-all. */
+.insights-page .eyebrow, .fleet-page .eyebrow, .settings-page .eyebrow,
+.model-lab-page .eyebrow, .automation-page .eyebrow, .workspaces-page .eyebrow,
+.console-page .eyebrow, .home-page .eyebrow,
+.fleet-page .panel-title, .fleet-page .provider-card h3,
+.automation-page .skill-card h3, .fleet-page .agent-detail h3 {
+  font-size: var(--type-300) !important;
+}
+
+/* Page heads and body copy recover the TEMM hierarchy above the floor. */
+.insights-page .product-page-head p, .fleet-page .product-page-head p,
+.settings-page .settings-page-head p, .model-lab-page .product-page-head p,
+.automation-page .product-page-head p, .workspaces-page .product-page-head p,
+.console-page .product-page-head p, .home-page .home-welcome p {
+  font-size: var(--type-300) !important;
+  color: var(--c-ink-3);
+}
+
+.insights-page h1, .fleet-page h1, .settings-page h1, .model-lab-page h1,
+.automation-page h1, .workspaces-page h1, .console-page h1, .home-page h1 {
+  font-family: var(--f-sans);
+  font-size: var(--type-700) !important;
+  color: var(--c-ink-max);
+}
+
+.insights-page .insight-metric strong, .fleet-page .fleet-summary strong,
+.model-lab-page .lab-summary strong, .home-page .home-metrics strong {
+  font-size: var(--type-600) !important;
+  font-family: var(--f-mono);
+  color: var(--c-ink-max);
+}
+
+.home-page .alert-list > div {
+  font-size: var(--type-300) !important;
+  color: var(--c-ink-1);
+}
+
+.home-page .system-ready {
+  font-size: var(--type-200) !important;
+  font-weight: 700;
+  color: var(--c-ink-2);
+}
+.home-page .system-ready[data-tone='attention'] { color: var(--state-attention) !important; }
+
+/* The one primary action per page: TEMM ink, not the legacy violet accent. */
+.insights-page .btn-primary, .fleet-page .btn-primary, .settings-page .btn-primary,
+.model-lab-page .btn-primary, .automation-page .btn-primary,
+.workspaces-page .btn-primary, .console-page .btn-primary, .home-page .btn-primary {
+  font-size: var(--type-200) !important;
+  background: var(--c-ink-1);
+  border: var(--w-hair) solid var(--c-ink-1);
+  color: var(--c-canvas) !important;
+}
+.insights-page .btn-primary:hover, .fleet-page .btn-primary:hover, .settings-page .btn-primary:hover,
+.model-lab-page .btn-primary:hover, .automation-page .btn-primary:hover,
+.workspaces-page .btn-primary:hover, .console-page .btn-primary:hover, .home-page .btn-primary:hover {
+  background: var(--c-ink-max);
+}
+
+/* ---- Status semantics: operational, never acceptance ---- */
+
+/* Emerald/amber/cyan badges become neutral ink chips; the WORD inside each
+   badge carries the state, so nothing is colour-only. */
+.insights-page .status-badge, .insights-page .fleet-badge,
+.fleet-page .status-badge, .fleet-page .fleet-badge,
+.settings-page .status-badge, .settings-page .fleet-badge,
+.model-lab-page .status-badge, .model-lab-page .fleet-badge,
+.automation-page .status-badge,
+.workspaces-page .status-badge,
+.console-page .status-badge {
+  background: var(--c-station);
+  color: var(--c-ink-2);
+  border: var(--w-hair) solid var(--c-line);
+  font-family: var(--f-sans);
+  font-weight: 650;
+  font-size: var(--type-200) !important;
+  color: var(--c-ink-2) !important;
+}
+
+/* Attention-true badges keep clay text. */
+.fleet-page .status-badge.discovery-failed,
+.fleet-page .status-badge.discovery-auth_required,
+.fleet-page .status-badge.model-error,
+.model-lab-page .status-badge.badge-amber,
+.settings-page .fleet-badge.badge-amber {
+  color: var(--state-attention);
+  border-color: color-mix(in srgb, var(--c-clay) 30%, transparent);
+}
+
+/* Status dots: neutral ink when fine, clay when attention. No glow, no pulse. */
+.insights-page .status-dot, .fleet-page .status-dot, .model-lab-page .status-dot,
+.automation-page .status-dot, .workspaces-page .status-dot, .console-page .status-dot,
+.home-page .status-dot {
+  background: var(--c-ink-2) !important;
+  box-shadow: none !important;
+  animation: none !important;
+}
+
+/* Model Lab benchmark scores are measurements, not verdicts. */
+.model-lab-page .benchmark-case-result .status-badge { font-family: var(--f-mono); }
+
+/* ---- System overview composition ---- */
+
+.home-page .home-welcome p {
+  max-inline-size: 62ch;
+}
+
+.home-page .system-ready {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--sp-2);
+  padding: var(--sp-2) var(--sp-3);
+  border: var(--w-hair) solid var(--c-line);
+  border-radius: var(--r-object);
+  background: var(--c-station);
+}
+.home-page .system-ready[data-tone='attention'] { border-color: color-mix(in srgb, var(--c-clay) 30%, transparent); }
+
+.home-page .alert-list { display: flex; flex-direction: column; gap: var(--sp-2); }
+.home-page .alert-list > div { display: flex; align-items: baseline; gap: var(--sp-2); }
+.home-page .alert-mark { inline-size: 8px; block-size: 8px; border-radius: 50%; background: var(--state-attention); flex-shrink: 0; translate: 0 -1px; }
+
+.home-page .home-metrics {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: var(--sp-3);
+}
+.home-page .home-metrics article {
+  border: var(--w-hair) solid var(--c-rule);
+  border-radius: var(--r-object);
+  background: var(--c-canvas);
+  padding: var(--sp-4);
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-1);
+}
+.home-page .home-metrics span { color: var(--c-ink-3); display: inline-flex; align-items: center; gap: var(--sp-1); text-transform: uppercase; letter-spacing: 0.05em; }
+
+.home-page .status-actions { display: flex; gap: var(--sp-2); flex-wrap: wrap; }
+
+@media (max-width: 520px) {
+  .home-page .home-lower-grid { grid-template-columns: 1fr; }
+  .home-page .home-metrics { grid-template-columns: 1fr 1fr; }
+  .home-page .home-welcome h1 { font-size: var(--type-600); }
+}
