@@ -77,16 +77,19 @@ class MediaTransformTests(unittest.IsolatedAsyncioTestCase):
         self.derivative_ids = []
 
     async def asyncTearDown(self):
-        async with AsyncSessionLocal() as session:
-            jobs = (await session.execute(__import__("sqlalchemy").select(AssetTransformJobRecord).where(AssetTransformJobRecord.original_asset_id.in_([self.image_id, self.audio_id])))).scalars().all()
-            derivative_ids = [job.derivative_asset_id for job in jobs if job.derivative_asset_id]
-            await session.execute(delete(AssetTransformJobRecord).where(AssetTransformJobRecord.original_asset_id.in_([self.image_id, self.audio_id])))
-            if derivative_ids:
-                await session.execute(delete(AssetRecord).where(AssetRecord.id.in_(derivative_ids)))
-            await session.execute(delete(AssetRecord).where(AssetRecord.id.in_([self.image_id, self.audio_id])))
-            await session.execute(delete(WorkspaceRecord).where(WorkspaceRecord.id == self.workspace_id))
-            await session.commit()
-        self.folder.cleanup()
+        try:
+            async with AsyncSessionLocal() as session:
+                jobs = (await session.execute(__import__("sqlalchemy").select(AssetTransformJobRecord).where(AssetTransformJobRecord.original_asset_id.in_([self.image_id, self.audio_id])))).scalars().all()
+                derivative_ids = [job.derivative_asset_id for job in jobs if job.derivative_asset_id]
+                await session.execute(delete(AssetTransformJobRecord).where(AssetTransformJobRecord.original_asset_id.in_([self.image_id, self.audio_id])))
+                if derivative_ids:
+                    await session.execute(delete(AssetRecord).where(AssetRecord.id.in_(derivative_ids)))
+                await session.execute(delete(AssetRecord).where(AssetRecord.id.in_([self.image_id, self.audio_id])))
+                await session.execute(delete(WorkspaceRecord).where(WorkspaceRecord.id == self.workspace_id))
+                await session.commit()
+        finally:
+            await self.service.manager.shutdown()
+            self.folder.cleanup()
 
     def asset(self, asset_id, relative, asset_type, mime):
         path = self.root / relative

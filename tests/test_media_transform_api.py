@@ -9,8 +9,9 @@ from pathlib import Path
 import httpx
 from sqlalchemy import delete
 
+from core.ai_fleet.engine.process_manager import process_manager
 from core.ai_fleet.main import app
-from core.ai_fleet.storage.database import AsyncSessionLocal, init_db
+from core.ai_fleet.storage.database import AsyncSessionLocal, engine, init_db
 from core.ai_fleet.storage.models import AssetRecord, AssetTransformJobRecord, WorkspaceRecord
 
 
@@ -38,17 +39,21 @@ class MediaTransformApiTests(unittest.IsolatedAsyncioTestCase):
         self.client = httpx.AsyncClient(transport=httpx.ASGITransport(app=app), base_url="http://test")
 
     async def asyncTearDown(self):
-        await self.client.aclose()
-        async with AsyncSessionLocal() as session:
-            jobs = (await session.execute(__import__("sqlalchemy").select(AssetTransformJobRecord).where(AssetTransformJobRecord.original_asset_id == self.asset_id))).scalars().all()
-            derivatives = [job.derivative_asset_id for job in jobs if job.derivative_asset_id]
-            await session.execute(delete(AssetTransformJobRecord).where(AssetTransformJobRecord.original_asset_id == self.asset_id))
-            if derivatives:
-                await session.execute(delete(AssetRecord).where(AssetRecord.id.in_(derivatives)))
-            await session.execute(delete(AssetRecord).where(AssetRecord.id == self.asset_id))
-            await session.execute(delete(WorkspaceRecord).where(WorkspaceRecord.id == self.workspace_id))
-            await session.commit()
-        self.folder.cleanup()
+        try:
+            await self.client.aclose()
+            async with AsyncSessionLocal() as session:
+                jobs = (await session.execute(__import__("sqlalchemy").select(AssetTransformJobRecord).where(AssetTransformJobRecord.original_asset_id == self.asset_id))).scalars().all()
+                derivatives = [job.derivative_asset_id for job in jobs if job.derivative_asset_id]
+                await session.execute(delete(AssetTransformJobRecord).where(AssetTransformJobRecord.original_asset_id == self.asset_id))
+                if derivatives:
+                    await session.execute(delete(AssetRecord).where(AssetRecord.id.in_(derivatives)))
+                await session.execute(delete(AssetRecord).where(AssetRecord.id == self.asset_id))
+                await session.execute(delete(WorkspaceRecord).where(WorkspaceRecord.id == self.workspace_id))
+                await session.commit()
+        finally:
+            await process_manager.shutdown()
+            await engine.dispose()
+            self.folder.cleanup()
 
     async def test_capability_and_image_transform_api(self):
         capability = await self.client.get("/api/assets/transforms/capability")

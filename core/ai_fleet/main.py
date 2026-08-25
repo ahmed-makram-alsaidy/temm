@@ -17,7 +17,7 @@ from fastapi.middleware.trustedhost import TrustedHostMiddleware
 from fastapi.staticfiles import StaticFiles
 from fastapi.responses import FileResponse, JSONResponse
 
-from .storage.database import AsyncSessionLocal, init_db
+from .storage.database import AsyncSessionLocal, engine, init_db
 from .services.runs import run_lifecycle_service
 from .api.routes import (
     fleet_router,
@@ -195,7 +195,10 @@ async def lifespan(app: FastAPI):
     try:
         yield
     finally:
-        await process_manager.shutdown()
+        try:
+            await process_manager.shutdown()
+        finally:
+            await engine.dispose()
 
 
 app = FastAPI(

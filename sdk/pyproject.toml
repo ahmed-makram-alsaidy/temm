@@ -19,9 +19,9 @@ classifiers = [
 ]
 
 [project.urls]
-Homepage = "https://github.com/niceteem/temm"
-Documentation = "https://github.com/niceteem/temm/tree/main/docs"
-Issues = "https://github.com/niceteem/temm/issues"
+Homepage = "https://github.com/ahmed-makram-alsaidy/temm"
+Documentation = "https://github.com/ahmed-makram-alsaidy/temm/tree/main/docs"
+Issues = "https://github.com/ahmed-makram-alsaidy/temm/issues"
 
 [project.scripts]
 temm = "aifleet_cli:main"

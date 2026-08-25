@@ -6,6 +6,9 @@ on:
 
 jobs:
   backend:
+    env:
+      AI_FLEET_TEST_DATABASE: "1"
+      AI_FLEET_DATA_DIR: ${{ runner.temp }}/ai-fleet-test-db
     strategy:
       fail-fast: false
       matrix:

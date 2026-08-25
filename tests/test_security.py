@@ -5,6 +5,7 @@ import unittest
 from core.ai_fleet.engine.event_bus import TaskEventBus
 from core.ai_fleet.engine.process_manager import ProcessManager
 from core.ai_fleet.security import REDACTED, SensitiveDataRedactor
+from core.ai_fleet.storage.database import init_db
 from core.ai_fleet.storage.secret_vault import secret_vault
 
 
@@ -25,6 +26,7 @@ class SensitiveDataRedactorTests(unittest.TestCase):
 
 class SecurityEgressTests(unittest.IsolatedAsyncioTestCase):
     async def asyncSetUp(self):
+        await init_db()
         self.key = "test-redaction-secret"
         self.secret = "agent-ultra-secret-739204857"
         secret_vault.set_key(self.key, self.secret)

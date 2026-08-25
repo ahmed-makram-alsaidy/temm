@@ -1,8 +1,6 @@
 name: publish-sdk
 
 on:
-  release:
-    types: [published]
   workflow_dispatch:
     inputs:
       dry_run:
@@ -31,7 +29,7 @@ jobs:
 
   publish:
     needs: build
-    if: github.event_name == 'release' || (github.event_name == 'workflow_dispatch' && !inputs.dry_run)
+    if: github.event_name == 'workflow_dispatch' && !inputs.dry_run
     runs-on: ubuntu-latest
     environment: pypi
     permissions:

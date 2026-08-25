@@ -53,7 +53,7 @@
    8.5–10px. Both live inside V8 surfaces now; both hold the floor here. */
 .runs-toolbar > span {
   font-size: var(--role-support);
-  color: var(--c-ink-3);
+  color: var(--c-ink-2);
 }
 
 .temm-v8-run-receipt small,

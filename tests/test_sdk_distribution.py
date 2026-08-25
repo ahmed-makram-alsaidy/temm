@@ -3,6 +3,7 @@ import os
 import subprocess
 import sys
 import tempfile
+import time
 import unittest
 import urllib.request
 import venv
@@ -31,8 +32,9 @@ class SdkDistributionTests(unittest.TestCase):
 
     def test_isolated_installed_console_negotiates_with_live_server(self):
         root = Path(__file__).parents[1]
-        with tempfile.TemporaryDirectory() as folder:
-            target = Path(folder)
+        folder = tempfile.TemporaryDirectory()
+        try:
+            target = Path(folder.name)
             wheels = target / "wheels"
             wheels.mkdir()
             built = subprocess.run([sys.executable, "-m", "pip", "wheel", str(root / "sdk"), "--no-deps", "--wheel-dir", str(wheels)], capture_output=True, text=True, timeout=180)
@@ -61,8 +63,21 @@ class SdkDistributionTests(unittest.TestCase):
                 self.assertIn("fleet_counts", payload)
             finally:
                 server.terminate()
-                try: server.wait(timeout=10)
-                except subprocess.TimeoutExpired: server.kill()
+                try:
+                    server.wait(timeout=10)
+                except subprocess.TimeoutExpired:
+                    server.kill()
+                    server.wait(timeout=10)
+        finally:
+            # Windows can retain a child process's SQLite lock briefly after exit.
+            for attempt in range(10):
+                try:
+                    folder.cleanup()
+                    break
+                except PermissionError:
+                    if attempt == 9:
+                        raise
+                    time.sleep(0.25)
 
 
 if __name__ == "__main__":

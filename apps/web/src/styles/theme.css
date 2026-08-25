@@ -708,6 +708,10 @@ select.input-text { color-scheme: light; }
 /* Setup, search, and deeper execution flows */
 .global-search-wrap { position: relative; z-index: 61; }
 .header-search kbd { padding: 2px 5px; border: 1px solid var(--border-subtle); border-radius: 5px; background: var(--bg-surface); color: var(--text-muted); font-size: var(--type-200); font-family: var(--font-sans); white-space: nowrap; direction: ltr; }
+/* Contrast fix: muted ink sits on an elevated surface here, where the dark
+   canvas-calibrated --c-ink-3 drops below 4.5:1. Secondary ink keeps both
+   themes compliant without changing the token contract. */
+[data-theme='dark'] .header-search kbd { color: var(--c-ink-2); }
 .header-search.active { border-color: var(--accent); background: var(--bg-surface); box-shadow: none; }
 .search-popover { position: absolute; top: calc(100% + 9px); left: 50%; width: min(480px, 86vw); max-height: min(560px, 70vh); overflow: auto; transform: translateX(-50%); padding: 7px; border: 1px solid var(--border-subtle); border-radius: 13px; background: var(--bg-surface); box-shadow: var(--shadow-lg); }
 .search-popover section + section { margin-top: 5px; padding-top: 5px; border-top: 1px solid var(--border-subtle); }
@@ -1069,7 +1073,7 @@ select.input-text { color-scheme: light; }
   padding: 0;
   border: 0;
   background: transparent;
-  color: var(--text-muted);
+  color: var(--c-ink-2);
   font-size: var(--type-200);
   font-weight: 650;
   cursor: pointer;
@@ -1088,7 +1092,7 @@ select.input-text { color-scheme: light; }
   text-transform: uppercase;
 }
 .panel-heading h2 { color: var(--text-primary); font-size: 13px; font-weight: 740; }
-.panel-heading p { margin-top: 3px; color: var(--text-muted); font-size: var(--type-200); }
+.panel-heading p { margin-top: 3px; color: var(--c-ink-2); font-size: var(--type-200); }
 .text-button {
   display: inline-flex;
   align-items: center;
@@ -1226,7 +1230,7 @@ select.input-text { color-scheme: light; }
 .home-metrics article > span { display: flex; align-items: center; gap: 6px; color: var(--text-secondary); font-size: var(--type-200); font-weight: 650; }
 .home-metrics article > span svg { color: var(--text-muted); }
 .home-metrics article > strong { display: block; margin-top: 11px; color: var(--text-primary); font: 760 20px/1.1 var(--font-sans); direction: ltr; text-align: start; }
-.home-metrics article > small { display: block; margin-top: 5px; color: var(--text-muted); font-size: var(--type-200); }
+.home-metrics article > small { display: block; margin-top: 5px; color: var(--c-ink-2); font-size: var(--type-200); }
 .home-lower-grid { display: grid; grid-template-columns: minmax(0, 1.4fr) minmax(280px, .7fr); gap: 14px; }
 .recent-panel,
 .attention-panel { padding: 18px; }
