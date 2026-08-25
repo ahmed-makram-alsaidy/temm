@@ -1,3 +1,4 @@
+import os
 import tempfile
 import unittest
 from datetime import datetime, timedelta
@@ -59,6 +60,7 @@ class ApprovalServiceTests(unittest.IsolatedAsyncioTestCase):
             self.assertEqual(record.status, "expired")
 
 
+@unittest.skipUnless(os.name == "nt", "Terminal approval execution requires Windows command shells.")
 class TerminalApprovalApiTests(unittest.IsolatedAsyncioTestCase):
     async def asyncSetUp(self):
         await init_db()

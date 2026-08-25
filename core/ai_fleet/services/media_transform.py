@@ -93,8 +93,6 @@ class MediaTransformService:
         return await self._execute(session, asset_id, output_path, normalized, args, "raster", "image/png", timeout_seconds, execution_id)
 
     async def _execute(self, session, asset_id: str, output_path: str, parameters: dict[str, Any], transform_args: list[str], asset_type: str, mime: str, timeout_seconds: float, execution_id: str | None):
-        if not self.ffmpeg or not self.ffprobe:
-            raise DomainError("execution_unavailable", message="FFmpeg and ffprobe are required for this transform.")
         if not 1 <= timeout_seconds <= 1800:
             raise DomainError("validation_failed", message="Media transform timeout is invalid.")
         original = await session.get(AssetRecord, asset_id)
@@ -109,6 +107,8 @@ class MediaTransformService:
             destination = self._destination(root, output_path)
         except PathPolicyError as exc:
             raise DomainError("validation_failed", message=str(exc)) from exc
+        if not self.ffmpeg or not self.ffprobe:
+            raise DomainError("execution_unavailable", message="FFmpeg and ffprobe are required for this transform.")
         input_hash = self._hash(source)
         if input_hash != original.sha256:
             raise DomainError("resource_conflict", message="Original asset content no longer matches its recorded hash.")
