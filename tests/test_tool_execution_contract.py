@@ -8,6 +8,7 @@ fallback, and a product-path run through the public REST surface.
 """
 
 import json
+import sys
 import tempfile
 import unittest
 import uuid
@@ -139,6 +140,7 @@ class ToolExecutionProcessTests(unittest.IsolatedAsyncioTestCase):
             await __import__("asyncio").sleep(0.05)
         self.assertFalse(psutil.pid_exists(pid))
 
+    @unittest.skipUnless(sys.platform == "win32", "executes a .cmd stub through cmd.exe")
     async def test_path_with_spaces_executes_without_quoting_defect(self):
         self.manager = ProcessManager(graceful_shutdown_seconds=0.5)
         with tempfile.TemporaryDirectory() as directory:
@@ -268,6 +270,7 @@ class ProductToolRunApiTests(unittest.IsolatedAsyncioTestCase):
     def _client(self):
         return httpx.AsyncClient(transport=self.transport, base_url="http://test")
 
+    @unittest.skipUnless(sys.platform == "win32", "spawns a .cmd stub via cmd.exe")
     async def test_onboarded_tool_executes_through_product_run_api(self):
         async with self._client() as client:
             created = (await client.post("/api/agents", json={
@@ -315,6 +318,7 @@ class ProductToolRunApiTests(unittest.IsolatedAsyncioTestCase):
             output = (await client.get(f"/api/runs/{run['id']}/output")).json()
             self.assertTrue(any("TEMM_PRODUCT_OK" in item["content"] for item in output))
 
+    @unittest.skipUnless(sys.platform == "win32", "spawns a .cmd stub via cmd.exe for auth gating")
     async def test_unauthenticated_discovered_tool_blocks_with_actionable_reason(self):
         gated_stub = _write_stub(self.spaced / "gated", f"gated tool {uuid.uuid4().hex[:6]}.cmd", "TEMM_GATED_OK")
         async with self._client() as client:
