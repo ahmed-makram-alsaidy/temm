@@ -94,5 +94,9 @@ jobs:
         run: npm ci
       - working-directory: apps/web
         run: npm run build
+      - name: Install Chrome for browser quality gates
+        uses: browser-actions/setup-chrome@v1
+        with:
+          browser: "chrome"
       - shell: pwsh
         run: .\tools\quality\browser-gates.ps1 -OutputRoot "$env:RUNNER_TEMP\ai-fleet-browser-gates"
