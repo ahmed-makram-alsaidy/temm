@@ -12,6 +12,7 @@ import tempfile
 import unittest
 import uuid
 from pathlib import Path
+from unittest.mock import patch
 
 import httpx
 import psutil
@@ -19,6 +20,7 @@ from sqlalchemy import delete
 
 from core.ai_fleet.cli_invocation import build_cli_args
 from core.ai_fleet.discovery import DiscoveryManifestLoader
+from core.ai_fleet.engine.execution_readiness import build_execution_preflight
 from core.ai_fleet.engine.process_manager import ProcessManager
 from core.ai_fleet.main import app
 from core.ai_fleet.services.project_dispatcher import ProjectDispatcherService
@@ -344,6 +346,53 @@ def shutil_which(name):
     import shutil
 
     return shutil.which(name)
+
+
+class CapabilityRoutingTests(unittest.IsolatedAsyncioTestCase):
+    """Multiple discovered tools must route by capability, not by discovery order."""
+
+    async def asyncSetUp(self):
+        await init_db()
+        self.folder = tempfile.TemporaryDirectory()
+        suffix = uuid.uuid4().hex[:8]
+        self.workspace_id = f"routing-workspace-{suffix}"
+        # Named so the coding tool sorts first alphabetically: a capability match
+        # must beat ordering, otherwise "the first discovered tool" wins every task.
+        self.coding_id = f"aaa-coding-{suffix}"
+        self.research_id = f"zzz-research-{suffix}"
+        async with AsyncSessionLocal() as session:
+            session.add(WorkspaceRecord(id=self.workspace_id, name="Routing WS", path=str(Path(self.folder.name).resolve()), permission_profile="developer", allowed_shells='["powershell"]', is_default=True))
+            session.add(_agent(id=self.coding_id, name="AAA Coding Stub", discovery_source="manual", capabilities=json.dumps(["coding"])))
+            session.add(_agent(id=self.research_id, name="ZZZ Research Stub", discovery_source="manual", capabilities=json.dumps(["research"])))
+            await session.commit()
+
+    async def asyncTearDown(self):
+        async with AsyncSessionLocal() as session:
+            await session.execute(delete(AgentRecord).where(AgentRecord.id.in_([self.coding_id, self.research_id])))
+            await session.execute(delete(WorkspaceRecord).where(WorkspaceRecord.id == self.workspace_id))
+            await session.commit()
+        self.folder.cleanup()
+        await engine.dispose()
+
+    async def _preflight(self, required):
+        scan = {"configured_providers": {}, "discovered_tools": [], "ollama_status": {"running": False, "models": []}}
+        with patch("core.ai_fleet.engine.execution_readiness.system_scanner.scan_system", return_value=scan):
+            return await build_execution_preflight(
+                prompt="Do the contracted work in this workspace.",
+                workspace_id=self.workspace_id,
+                required_capabilities=required,
+            )
+
+    async def test_research_contract_selects_the_research_tool(self):
+        preflight = await self._preflight(["research"])
+        self.assertTrue(preflight["can_execute"], preflight["blockers"])
+        self.assertEqual(preflight["execution_method"], "cli")
+        self.assertEqual(preflight["selected_agent"]["id"], self.research_id)
+
+    async def test_coding_contract_selects_the_coding_tool(self):
+        preflight = await self._preflight(["coding"])
+        self.assertTrue(preflight["can_execute"], preflight["blockers"])
+        self.assertEqual(preflight["selected_agent"]["id"], self.coding_id)
 
 
 if __name__ == "__main__":
