@@ -1322,19 +1322,24 @@ class ProjectDispatcherService:
         ranked = sorted(candidates, key=rank)
         executable = [item for item in ranked if not is_unusable(item)]
         if not executable:
-            # A locally installed CLI that is not the model-routing OpenCode route is
-            # itself an executable route: `_build_argv_with_model` hands a model only to
-            # OpenCode and invokes every other agent through its own declared invocation.
-            # So when no model route has current capability evidence, refusing the dispatch
-            # discarded the one route that could actually run - and the readiness gate had
-            # just handed the owner exactly that route, so the gate promised what the
-            # dispatcher then refused. Preferred second, never first: a route with
-            # execution-proven capability evidence still wins, which keeps the model
-            # ledger, census and renewal on the routes they belong to. The agent is
-            # accepted on the same evidence the gate used - `AgentAssignmentService` has
-            # already required it to be verified, authenticated, permitted for this
-            # workspace, and to declare every capability the task asked for.
-            if agent and agent.id != "opencode-cli":
+            # A locally installed CLI is itself an executable route, OpenCode included:
+            # `_build_argv_with_model` hands a model only to an OpenCode route that has
+            # one, and invokes every agent without a model through its own declared
+            # invocation. So when no model route has current capability evidence,
+            # refusing the dispatch discarded the one route that could actually run -
+            # and the readiness gate had just handed the owner exactly that route, so
+            # the gate promised what the dispatcher then refused. Production evidence
+            # for the v0.1.1 hotfix: an OpenCode-only machine (discovery verified, auth
+            # checked) could never dispatch a project task, because this fallback
+            # excluded `opencode-cli` by id and per-model capability evidence did not
+            # exist until routes were individually probed. Preferred second, never
+            # first: a route with execution-proven capability evidence still wins,
+            # which keeps the model ledger, census and renewal on the routes they
+            # belong to. The agent is accepted on the same evidence the gate used -
+            # `AgentAssignmentService` has already required it to be verified,
+            # authenticated, permitted for this workspace, and to declare every
+            # capability the task asked for.
+            if agent:
                 return {
                     "provider": agent.id,
                     "model": None,

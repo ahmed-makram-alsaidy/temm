@@ -277,6 +277,15 @@ class AgentRecord(Base):
     updated_at = Column(DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
 
     def to_dict(self) -> Dict[str, Any]:
+        execution_ready = (
+            self.tool_kind == "agent"
+            and bool(self.user_enabled)
+            and self.lifecycle_status == "active"
+            and self.discovery_state == "verified"
+            and self.status == "ready"
+            and self.auth_state in {"not_required", "verified"}
+            and bool(self.detected_path or self.cli_command)
+        )
         return {
             "id": self.id,
             "name": self.name,
@@ -316,6 +325,7 @@ class AgentRecord(Base):
             "detected_path": self.detected_path,
             "version": self.version,
             "status": self.status,
+            "execution_ready": execution_ready,
             "last_checked_at": self.last_checked_at.isoformat() if self.last_checked_at else None,
             "description": self.description,
             "created_at": self.created_at.isoformat() if self.created_at else None,

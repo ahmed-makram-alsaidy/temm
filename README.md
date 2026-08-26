@@ -23,31 +23,63 @@ Define done. TEMM handles the work required to get there.
 - Advanced benchmark, Arena, workflow, research, asset, orchestration, and delivery behavior has backend foundations but is not uniformly complete across every provider and UI workflow.
 - Financial, usage, value, and quality dimensions may be provider-reported, measured, estimated, or unknown; the UI keeps these categories separate.
 - Linux/macOS PTY backends are not implemented.
+- The pinned Windows dependency set (`requirements-lock-win.txt`) targets **CPython 3.12 x64**; other Python versions and ARM64 Windows are not covered by the hash-locked install yet.
 - Heavy frontend routes and xterm are code-split; the lazy RunWorkspace chunk remains about 366 kB and needs continued optimization.
 - pywinpty and aiosqlite emit internal `ResourceWarning`s in tests although verified lifecycle checks pass.
 
 ## Start locally
 
-### Windows PowerShell
+TEMM currently ships as a **source checkout** — there is no packaged desktop installer or PyPI package yet. If a page or post implies "download and run an installer", that mode does not exist today.
+
+Prerequisites (Windows):
+
+- Windows 10/11 with PowerShell
+- **Python 3.12, 64-bit** (`py -3.12 --version` must work) — the dependency lock is built for CPython 3.12 x64
+- **Node.js 22 + npm** — needed on first run to build the web interface
+- Git, to clone this repository
+
+### User setup — Windows PowerShell (recommended)
 
 ```powershell
+git clone https://github.com/ahmed-makram-alsaidy/temm.git
+cd temm
 .\start.ps1
 ```
 
-### Windows batch
+`start.ps1` is the supported one-command path. From the repository root it will:
 
-```bat
-start.bat
-```
+1. find a CPython 3.12 interpreter (via `py -3.12`, else `python`),
+2. create a project-local `.venv` so your global Python stays untouched,
+3. install the hash-pinned Windows dependencies into `.venv`,
+4. build `apps\web\dist` with npm on first run,
+5. start TEMM at `http://localhost:8787`.
 
-### Python
+Re-running `.\start.ps1` later skips straight to startup. A Windows batch equivalent exists: `start.bat`.
+
+### Manual equivalent (PowerShell)
 
 ```powershell
-python -m pip install -r requirements.txt
+git clone https://github.com/ahmed-makram-alsaidy/temm.git
+cd temm
+py -3.12 -m venv .venv
+.\.venv\Scripts\Activate.ps1
+python -m pip install --require-hashes -r requirements-lock-win.txt
+cd apps\web
+npm ci
+npm run build
+cd ..\..
 python run.py
 ```
 
-The local application defaults to `http://localhost:8787`. Launchers fail on dependency/build errors, and the browser opens only after HTTP readiness.
+### Configuration
+
+Copy `.env.example` to `.env` to set `AI_FLEET_PORT`, provider keys, or `AI_FLEET_DATA_DIR`; `run.py` loads it at startup. By default TEMM stores its local database under `%USERPROFILE%\.ai_fleet`. The server accepts loopback connections only.
+
+The `temm-sdk` package is **not published on PyPI**. The SDK ships inside this repository; see `docs/API.md` ("Python SDK distribution") for the supported `pip install .\sdk` path.
+
+### Developer setup
+
+Use the same steps as User setup, then run the quality gates below before contributing changes.
 
 ## Repository layout
 

@@ -155,10 +155,13 @@ writes `{"error": {"code": "goal_required", ...}}` to stderr. The user-facing wo
 The distributable SDK is isolated under `sdk/` and does not include backend modules:
 
 ```powershell
-python -m pip wheel .\sdk --no-deps --wheel-dir .\dist-sdk
-python -m pip install .\dist-sdk\ai_fleet_local_sdk-0.1.0-py3-none-any.whl
+python -m pip install .\sdk
 
 aifleet --base-url http://127.0.0.1:8787 --json inspect fleet
 ```
+
+The SDK is not published to PyPI (`pip install temm-sdk` does not work); the only supported
+install path is this in-repository source install, which produces the `temm` and `aifleet`
+console commands declared by `sdk/pyproject.toml`.
 
 Public imports use `from aifleet_sdk import AiFleetClient, AiFleetSdkError, AiFleetValidationError`. The client negotiates the domain schema before normal commands and maps timeout, connection, HTTP, and invalid-JSON failures to typed SDK errors. A call the client refuses itself raises `AiFleetValidationError`, which subclasses `ValueError` and carries a `code`; no request is sent. `create_project(name, slug, project_type, goal, ...)` requires a non-empty `goal` and raises `AiFleetValidationError("goal_required")` without it - the earlier `purpose=` keyword is still accepted as an alias for wire compatibility. No package publication is currently claimed.

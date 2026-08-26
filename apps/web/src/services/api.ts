@@ -113,6 +113,7 @@ export interface Agent {
   detected_path: string;
   version: string;
   status: string;
+  execution_ready?: boolean;
   auth_status?: string;
   auth_message?: string;
   setup_command?: string | null;

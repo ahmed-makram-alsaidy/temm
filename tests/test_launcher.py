@@ -38,6 +38,22 @@ class LauncherTests(unittest.TestCase):
         self.assertIn("if errorlevel 1", batch)
         self.assertNotIn("pause", batch.lower())
 
+    def test_windows_launchers_pin_python_312_and_use_local_venv(self):
+        """v0.1.1 install contract: hash-pinned deps demand CPython 3.12 x64,
+        installed into a project-local .venv instead of the global interpreter."""
+        powershell = (ROOT / "start.ps1").read_text()
+        batch = (ROOT / "start.bat").read_text()
+        for launcher in (powershell, batch):
+            self.assertIn("3.12", launcher)
+            self.assertIn(".venv", launcher)
+        self.assertIn("requirements-lock-win.txt", powershell)
+        self.assertIn("--require-hashes", powershell)
+
+    def test_runtime_loads_env_file_when_dotenv_is_available(self):
+        source = (ROOT / "run.py").read_text()
+        self.assertIn("load_dotenv", source)
+        self.assertIn(".env", source)
+
 
 if __name__ == "__main__":
     unittest.main()
