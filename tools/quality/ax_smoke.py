@@ -68,7 +68,9 @@ async def run(chrome: Path, url: str):
                 await asyncio.sleep(1)
                 created = await cdp.value("fetch('/api/agents',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({name:'AX Agent',executable:'python',version_probe_args:['--version'],health_probe_args:['--version'],invocation_args:['-c','print(1)'],capabilities:['coding'],probe_timeout_seconds:5})}).then(r=>r.ok||r.status===409)")
                 await cdp.value("document.querySelector(\"[data-route='fleet']\")?.click()")
-                await asyncio.sleep(.7)
+                for _ in range(100):
+                    if await cdp.value("[...document.querySelectorAll('button')].some(x=>x.textContent.trim()==='Agents')"): break
+                    await asyncio.sleep(.1)
                 await cdp.value("[...document.querySelectorAll('button')].find(x=>x.textContent.trim()==='Agents')?.click()")
                 for _ in range(100):
                     if await cdp.value("[...document.querySelectorAll('button')].some(x=>x.textContent.trim()==='Details')"): break

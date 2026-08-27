@@ -70,7 +70,9 @@ async def run(chrome: Path, url: str):
                 checks["agent_created"] = await cdp.value("fetch('/api/agents',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({name:'Keyboard Agent',executable:'python',version_probe_args:['--version'],health_probe_args:['--version'],invocation_args:['-c','print(1)'],capabilities:['coding'],probe_timeout_seconds:5})}).then(r=>r.ok)")
                 await cdp.call("Page.reload"); await asyncio.sleep(1)
                 checks["fleet_clicked"] = await cdp.value("(() => { const b=[...document.querySelectorAll('button')].find(x=>x.querySelector('.nav-text')?.textContent.trim()==='Tools'); if(!b)return false;b.click();return true })()")
-                await asyncio.sleep(.8)
+                for _ in range(100):
+                    if await cdp.value("[...document.querySelectorAll('button')].some(x=>x.textContent.trim()==='Agents')"): break
+                    await asyncio.sleep(.1)
                 checks["agents_tab_clicked"] = await cdp.value("(() => { const b=[...document.querySelectorAll('button')].find(x=>x.textContent.trim()==='Agents'); if(!b)return false;b.click();return true })()")
                 for _ in range(100):
                     if await cdp.value("[...document.querySelectorAll('button')].some(x=>x.textContent.trim()==='Details')"): break
